@@ -8,7 +8,7 @@ let GameObj = {
     day: 1,
     daysPerSeason: 10,
     year: 1750,
-    minute: 900,
+    minute: 301,
     minutesPerDay: (16 * 60), // 960 minutes per day is how the game reckons
     wakeHour: 6,
     sleepHour: 22
@@ -39,9 +39,9 @@ let CharObj = {
     { name: 'rage', perform: rage },
 
     { name: 'tool', perform: selectTool },
-    { name: 'journal', perform: journal },
-    { name: 'look', perform: look },
     { name: 'inv.', perform: inventory },
+    { name: 'look', perform: look },
+    { name: 'journal', perform: journal }
   ],
 
   inventory: [],
@@ -70,24 +70,22 @@ function rage() {
 
 }
 
-function look() {
-
-}
-
-function fight() {
-
-}
-
 function selectTool() {
 
 }
 
 function inventory() {
+  document.querySelector('.journal-container').classList.add('hide');
+  document.querySelector('.inventory-container').classList.remove('hide');
+}
+
+function look() {
 
 }
 
 function journal() {
-
+  document.querySelector('.inventory-container').classList.add('hide');
+  document.querySelector('.journal-container').classList.remove('hide');
 }
 
 function convertTime(time) {
@@ -102,7 +100,7 @@ function convertTime(time) {
     suffix = 'am'
   }
 
-  if(minute === 0){ minute = '00'; }
+  if(minute < 10){ minute = '0' + minute; }
 
   let timeString = `${hour}:${minute} ${suffix}`;
 
@@ -143,9 +141,34 @@ function genGame() {
     container.appendChild(timeBar);
   }
 
+  function genFunctionBtnContainer() {
+    let container = document.querySelector('.function-btn-container');
+    let configBtn = document.createElement('div');
+    let homeBtn = document.createElement('div');
+    let infoBtn = document.createElement('div');
+
+    configBtn.innerText = 'Cfg';
+    homeBtn.innerText = 'Home';
+    infoBtn.innerText = '?';
+
+    container.appendChild(configBtn);
+    container.appendChild(homeBtn);
+    container.appendChild(infoBtn);
+  }
+
   // the right container is toggled to show the journal or inventory
   function genRightContainer() {
+    let container = document.querySelector('.right-container');
+    let journalContainer = document.createElement('div');
+    let inventoryContainer = document.createElement('div');
 
+    journalContainer.classList.add('journal-container');
+    journalContainer.innerText = 'this is the journal';
+    inventoryContainer.classList.add('inventory-container', 'hide');
+    inventoryContainer.innerText = 'this is the inventory';
+
+    container.appendChild(journalContainer);
+    container.appendChild(inventoryContainer);
   }
 
   // left btn container is static "eat" "nap" "think" "rage"
@@ -195,6 +218,7 @@ function genGame() {
 
   genLeftContainer();
   genHeaderContainer();
+  genFunctionBtnContainer();
   genRightContainer();
   genLeftBtnContainer();
   genDialogContainer();
