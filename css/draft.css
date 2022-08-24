@@ -1,0 +1,70 @@
+:root * {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.fullscreen-grid {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 120px 100fr 120px;
+    grid-template-rows: 2em 100fr 120px;
+}
+
+.grid-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    border: 1px solid black;
+}
+
+.left-container {
+    grid-column: 1 / 1;
+    grid-row: 1 / 3;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.right-container {
+    grid-column: 3 / 3;
+    grid-row: 1 / 3;
+}
+
+.left-btn-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.right-btn-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.view-container {
+    background-color: cadetblue;
+}
+
+.dialog-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.statBar {
+    height: 5px;
+    width: 100%;
+}
+
+.gamepad-btn {
+    border-radius: 5px;
+}
+
+.time-bar {
+    background-color: lightskyblue;
+    width: 50%;
+    height: 50%;
+}
