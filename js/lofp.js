@@ -95,22 +95,21 @@ let Game = {
 let Character = {
   isAlive: true,
   isAsleep: false,
-  stats: [
-    { name: 'health', value: 10, color: 'red' },
-    { name: 'stamina', value: 50, color: 'lime' },
-    { name: 'accuracy', value: 50, color: 'turquoise' },
-    { name: 'power', value: 50, color: 'purple' },
-    { name: 'luck', value: 50, color: 'orange' },
-  ],
+  stats: {
+    health: 10,
+    stamina: 50,
+    accuracy: 50,
+    power: 50,
+    luck: 50
+  },
 
   changeStat: (stat, amount) => {
-    let statName = Character.stats[stat].name;
-    let statBar = document.querySelector(`.${statName}-bar`);
-    let statNumber = statBar.previousElementSibling;
+    let statBar = document.querySelector(`.${stat}-bar`);
+    let statSpan = statBar.previousElementSibling;
 
-    Character.stats[stat].value += amount;
-    statBar.style.width = Character.stats[stat].value + '%';
-    statNumber.innerText = Character.stats[stat].value;
+    Character.stats[stat] += amount;
+    statBar.style.width = Character.stats[stat] + '%';
+    statSpan.innerText = Character.stats[stat];
   },
 
   actions: [
@@ -130,14 +129,17 @@ let Character = {
   inventory: [],
 
   update: function update() {
-    Character.stats.forEach(stat => {
-      let statBar = document.querySelector(`.${stat.name}-bar`);
-      let statNumber = statBar.previousElementSibling;
-      if(stat.value > 100){stat.value = 100};
-      statBar.style.width = `${stat.value}%`;
-      statNumber.innerText = stat.value;
-    });
-    if(Character.stats[0].value <= 0) {
+    let statsList = Object.keys(Character.stats);
+    for(i=0; i < statsList.length; i++) {
+      let statName = statsList[i];
+      let statValue = Character.stats[statName];
+      let statBar = document.querySelector(`.${statName}-bar`);
+      let statSpan = statBar.previousElementSibling;
+      if(statValue > 100){statValue = 100};
+      statBar.style.width = `${statValue}%`;
+      statSpan.innerText = statValue;
+    };
+    if(Character.stats.health <= 0) {
       Character.death();
     };
   },
@@ -153,8 +155,8 @@ let Character = {
 let dialogContainer = document.querySelector('.dialog-container');
 
 function eat() {
-  Character.changeStat(0, 10);
-  Character.changeStat(1, 5);
+  Character.changeStat('health', 10);
+  Character.changeStat('stamina', 5);
   Game.time.minute += 30;
   Character.update();
   Game.update();
@@ -176,16 +178,16 @@ function wake() {
 }
 
 function think() {
-  Character.changeStat(1, -1);
-  Character.changeStat(2, 10);
-  Character.changeStat(3, -10);
+  Character.changeStat('stamina', -1);
+  Character.changeStat('accuracy', 10);
+  Character.changeStat('power', -10);
   Game.update();
 }
 
 function rage() {
-  Character.changeStat(1, -3);
-  Character.changeStat(2, -10);
-  Character.changeStat(3, 10);
+  Character.changeStat('stamina', -3);
+  Character.changeStat('accuracy', -10);
+  Character.changeStat('power', 10);
   Game.update();
 }
 
@@ -212,25 +214,25 @@ function genGame() {
   // the left container is for Stats
   function genLeftContainer() {
     let leftContainer = document.querySelector('.left-container');
-    let statsLength = Object.keys(Character.stats).length;
-
-    for (i = 0; i < statsLength; i++) {
+    let statsList = Object.keys(Character.stats);
+    
+    for (i = 0; i < statsList.length; i++) {
       let statContainer = document.createElement('div');
-      let statBar = document.createElement('div');
-      let statName = document.createElement('strong');
-      let statValue = document.createElement('span');
-      let stat = Character.stats[i];
+      let statBarElement = document.createElement('div');
+      let statNameElement = document.createElement('strong');
+      let statValueElement = document.createElement('span');
+      let statName = statsList[i];
+      console.log(statName);
 
-      statName.innerText = stat.name;
-      statValue.innerText = stat.value;
+      statNameElement.innerText = statName;
+      statValueElement.innerText = Character.stats[statName];
       statContainer.classList.add('statContainer');
-      statBar.classList.add('stat-bar');
-      statBar.classList.add(`${stat.name}-bar`);
-      statBar.style.backgroundColor = stat.color;
+      statBarElement.classList.add('stat-bar');
+      statBarElement.classList.add(`${statName}-bar`);
 
-      statContainer.appendChild(statName);
-      statContainer.appendChild(statValue);
-      statContainer.appendChild(statBar);
+      statContainer.appendChild(statNameElement);
+      statContainer.appendChild(statValueElement);
+      statContainer.appendChild(statBarElement);
       leftContainer.appendChild(statContainer);
     }
   }

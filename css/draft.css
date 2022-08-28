@@ -60,11 +60,6 @@
     align-items: center;
 }
 
-.stat-bar {
-    height: 5px;
-    width: 100%;
-}
-
 .gamepad-btn {
     border-radius: 5px;
 }
@@ -77,4 +72,29 @@
 
 .hide {
     display: none;
+}
+    
+.stat-bar {
+    height: 5px;
+    width: 100%;
+}
+
+.health-bar {
+    background-color: red;
+}
+
+.stamina-bar {
+    background-color: lime;
+}
+
+.accuracy-bar {
+    background-color: turquoise;
+}
+
+.power-bar {
+    background-color: purple;
+}
+
+.luck-bar {
+    background-color: gold;
 }
