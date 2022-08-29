@@ -98,3 +98,13 @@
 .luck-bar {
     background-color: gold;
 }
+
+.time-date-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.date {
+    right: 0;
+}
