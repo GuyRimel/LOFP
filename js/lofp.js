@@ -4,7 +4,7 @@ let Game = {
   },
   
   time: {
-    season: 'spring',
+    season: ['spring', 'summer', 'fall', 'winter'],
     day: 1,
     daysPerSeason: 10,
     year: 1750,
@@ -30,18 +30,9 @@ let Game = {
       Game.dialog.setDialog('Goodniiiight... zzz...', 60);
     },
     
-    changeTime: function changeTime(amount) {
-      let time = Game.time.minute;
-      time += amount;
-      let timeElement = document.querySelector('.time');
-      let timeBar = document.querySelector('.time-bar');
-      // set the timeBarWidth to a percentage of time remaining in the day
-      let timeBarWidth = 100 - (Game.time.minute / Game.time.minutesPerDay * 100);
-      timeBar.style.width = timeBarWidth + '%';
-
+    convertTime: function convertTime(time) {
       let hour = Game.time.wakeHour + Math.floor(time / 60);
       let minute = time % 60;
-      if(minute < 10){ minute = '0' + minute; }
       let suffix;
       
       if(hour >= 12) {
@@ -51,22 +42,12 @@ let Game = {
         suffix = 'am'
       }
       
+      if(minute < 10){ minute = '0' + minute; }
+      
       let timeString = `${hour}:${minute} ${suffix}`;
-      timeElement.innerText = timeString;
-  
-      if (Game.time.minute >= Game.time.minutesPerDay) {
-        Game.time.dayEnd();
-      }
+      
+      return timeString;
     },
-
-    changeDate: function changeDate(days){
-      let dateElement = document.querySelector('.date');
-      let season = Game.time.season;
-      let day = Game.time.day += days;
-      let year = Game.time.year;
-      let dateString = `${season} ${day}, ${year}`;
-      dateElement.innerText = dateString;
-    }
   },
 
   dialog: {
@@ -97,7 +78,19 @@ let Game = {
     }
   },
 
-  update: () => {}
+  update: () => {
+    let time = document.querySelector('.time');
+    let timeBar = document.querySelector('.time-bar');
+    // set the timeBarWidth to a percentage of time remaining in the day
+    let timeBarWidth = 100 - (Game.time.minute / Game.time.minutesPerDay * 100);
+
+    time.innerText = Game.time.convertTime(Game.time.minute);
+    timeBar.style.width = timeBarWidth + '%';
+
+    if (Game.time.minute >= Game.time.minutesPerDay) {
+      Game.time.dayEnd();
+    }
+  }
 };
 
 let Character = {
@@ -112,16 +105,13 @@ let Character = {
   },
 
   changeStat: (stat, amount) => {
-    if(Character.isAsleep || !Character.isAlive){return};
     let statBar = document.querySelector(`.${stat}-bar`);
     let statSpan = statBar.previousElementSibling;
-    let statValue = Character.stats[stat];
 
-    statValue += amount;
-    statSpan.innerText = statValue;
+    Character.stats[stat] += amount;
+    statSpan.innerText = Character.stats[stat];
 
-    if(statValue < 0) {statBar.style.width = '0%'};
-    if(statValue > 100) {statBar.style.width = '100%'};
+    if(Character.stats[stat] < 0) {}
     statBar.style.width = Character.stats[stat] + '%';
   },
 
@@ -141,7 +131,21 @@ let Character = {
 
   inventory: [],
 
-  update: function update() {},
+  update: function update() {
+    let statsList = Object.keys(Character.stats);
+    for(i=0; i < statsList.length; i++) {
+      let statName = statsList[i];
+      let statValue = Character.stats[statName];
+      let statBar = document.querySelector(`.${statName}-bar`);
+      let statSpan = statBar.previousElementSibling;
+      if(statValue > 100){statValue = 100};
+      statBar.style.width = `${statValue}%`;
+      statSpan.innerText = statValue;
+    };
+    if(Character.stats.health <= 0) {
+      Character.death();
+    };
+  },
 
   death: function() {
     this.isAlive = false;
@@ -156,7 +160,10 @@ let dialogContainer = document.querySelector('.dialog-container');
 function eat() {
   Character.changeStat('health', 10);
   Character.changeStat('stamina', 5);
-  
+  Game.time.minute += 30;
+  Character.update();
+  Game.update();
+
   if(!Character.isAsleep){
     Game.dialog.sayDialog('munch, munch - *BURP');
   }
@@ -236,21 +243,14 @@ function genGame() {
   // the header container is for time display
   function genHeaderContainer() {
     let container = document.querySelector('.header-container');
-    let timeDateContainer = document.createElement('div');
-    let timeElement = document.createElement('div');
-    let dateElement = document.createElement('div');
+    let time = document.createElement('div');
     let timeBar = document.createElement('div');
-    
-    timeElement.classList.add('time');
-    dateElement.classList.add('date');
+    time.innerText = Game.time.convertTime(Game.time.minute);
+
     timeBar.classList.add('time-bar');
-    timeDateContainer.classList.add('time-date-container');
-    timeDateContainer.appendChild(timeElement);
-    timeDateContainer.appendChild(dateElement);
-    container.appendChild(timeDateContainer);
+    time.classList.add('time');
+    container.appendChild(time);
     container.appendChild(timeBar);
-    Game.time.changeTime(0);
-    Game.time.changeDate(0);
   }
 
   function genFunctionBtnContainer() {
@@ -340,4 +340,5 @@ function genGame() {
 }
 
 genGame();
+Game.update();
 Character.update();
