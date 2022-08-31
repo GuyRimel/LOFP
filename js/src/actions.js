@@ -20,8 +20,8 @@ let Actions = (function() {
       Character.isAsleep ||
       Character.isBusy) { return }
     Game.time.changeTime(30);
-    Character.changeStat('stamina', 5);
-    Character.changeStat('health', 10);
+    Character.changeStat('stamina', 2);
+    Character.changeStat('health', 8);
     Game.dialog.say('munch, munch - *BURP');
   }
   
@@ -34,24 +34,24 @@ let Actions = (function() {
   }
   
   function sleep() {
+    document.querySelector('#btn2').innerText = "nap";
     Character.isAsleep = false;
     Game.time.dayStart();
-    document.querySelector('#btn2').innerText = "nap";
   }
   
   function think() {
     if(!Character.isAble()) { return }
     Character.isExhausted = false;
     Character.changeStat('stamina', -1);
-    Character.changeStat('accuracy', 10);
-    Character.changeStat('power', -10);
+    Character.changeStat('accuracy', 5);
+    Character.changeStat('power', -5);
   }
   
   function rage() {
     if(!Character.isAble()) { return }
     Character.changeStat('stamina', -3);
-    Character.changeStat('accuracy', -15);
-    Character.changeStat('power', 10);
+    Character.changeStat('accuracy', -5);
+    Character.changeStat('power', 5);
   }
   
   function selectTool() {
