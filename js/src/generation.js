@@ -15,7 +15,7 @@ function genGame() {
 
       statNameElement.innerText = statName;
       statValueElement.innerText = Character.stats[statName];
-      statContainer.classList.add('statContainer');
+      statContainer.classList.add('stat-container');
       statBarElement.classList.add('stat-bar');
       statBarElement.classList.add(`${statName}-bar`);
 
@@ -29,13 +29,23 @@ function genGame() {
   // the header container is for time display
   function genHeaderContainer() {
     let container = document.querySelector('.header-container');
-    let time = document.createElement('div');
+    let weatherTimeDate = document.createElement('div');
+    let weather = document.createElement('span');
+    let time = document.createElement('span');
+    let date = document.createElement('span');
     let timeBar = document.createElement('div');
     time.innerText = Game.time.convertTime(Game.time.minute);
 
-    timeBar.classList.add('time-bar');
+    weatherTimeDate.classList.add('weather-time-date');
+    weather.classList.add('weather');
     time.classList.add('time');
-    container.appendChild(time);
+    date.classList.add('date');
+    timeBar.classList.add('time-bar');
+
+    weatherTimeDate.appendChild(weather);
+    weatherTimeDate.appendChild(time);
+    weatherTimeDate.appendChild(date);
+    container.appendChild(weatherTimeDate);
     container.appendChild(timeBar);
   }
 
@@ -130,6 +140,7 @@ function genGame() {
   genDialogContainer();
   genRightBtnContainer();
   genViewContainer();
+  Game.time.dayStart();
 }
 
 genGame();

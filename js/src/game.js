@@ -1,20 +1,26 @@
 let Game = {
   config: {},
 
+  weather: ["sunny", 'cloudy', 'rainy', 'snowy', 'monsoon'],
+
   time: {
-    season: ["spring", "summer", "fall", "winter"],
-    day: 1,
+    seasonsList: ["spring", "summer", "fall", "winter"],
+    season:"spring",
+    day: 0,
     daysPerSeason: 10,
     year: 1750,
     minute: 480,
     minutesPerDay: 960, // 16 Hours
     wakeHour: 6,
     sleepHour: 22,
-
+    
     dayStart: function dayStart() {
-      document.querySelector(".view-container").style.backgroundColor =
-        "skyblue";
+      let weather = document.querySelector(".weather");
+      weather.innerText = Game.weather[Math.floor(Math.random()*5)];
       Game.time.day++;
+      Game.time.setDate();
+      document.querySelector(".view-container").style.backgroundColor =
+      "skyblue";
       Game.time.minute = 0;
       Game.time.changeTime(0);
       Game.dialog.say("Goodmorning!", 20, 1);
@@ -26,7 +32,7 @@ let Game = {
       document.querySelector("#btn2").innerText = "sleep";
       document.querySelector(".view-container").style.backgroundColor =
         "darkblue";
-      Game.dialog.say("Goodniiiight... zzz...", 60, 1);
+        Game.dialog.say("Goodniiiight... zzz...", 60, 1);
     },
 
     convertTime: function convertTime(time) {
@@ -40,7 +46,7 @@ let Game = {
       } else {
         suffix = "am";
       }
-
+      
       if (minute < 10) {
         minute = "0" + minute;
       }
@@ -50,25 +56,29 @@ let Game = {
       return timeString;
     },
 
+    setDate: function setDate() {
+      let date = document.querySelector(".date");
+      let season = Game.time.season;
+      let day = Game.time.day;
+      let year = Game.time.year;
+      date.innerText = `${season} ${day}, ${year}`;
+    },
+    
     changeTime: function changeTime(amount) {
       Game.time.minute += amount;
       let currentMinute = Game.time.minute;
       let minutesPerDay = Game.time.minutesPerDay;
-
-      if (currentMinute >= minutesPerDay) {
-        Game.time.dayEnd;
-      }
-
+      
       let time = document.querySelector(".time");
       let timeBar = document.querySelector(".time-bar");
-
+      
       // set the timeBarWidth to a percentage of time remaining in the day
       let timeBarWidth = 100 - (currentMinute / minutesPerDay) * 100;
 
       time.innerText = Game.time.convertTime(currentMinute);
       timeBar.style.width = timeBarWidth + "%";
 
-      if (Game.time.minute >= Game.time.minutesPerDay) {
+      if (currentMinute >= minutesPerDay) {
         Game.time.dayEnd();
       }
     },

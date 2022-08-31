@@ -16,10 +16,11 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    border: 1px solid black;
+    border: 1px solid #444;
 }
 
 .left-container {
+    background-color: #efefef;
     grid-column: 1 / 1;
     grid-row: 1 / 3;
 }
@@ -52,6 +53,7 @@
 }
 
 .dialog-container {
+    background-color: #222;
     display: flex;
     flex-flow: column wrap;
     justify-content: space-evenly;
@@ -59,16 +61,17 @@
 }
 
 .feedback {
+    color: lightgray;
+}
+
+.dialog {
+    color: white;
+    background-image: linear-gradient(#222, #111, #222);
+    padding: 5px;
 }
 
 .gamepad-btn {
     border-radius: 5px;
-}
-
-.time-bar {
-    background-color: lightskyblue;
-    width: 50%;
-    height: 50%;
 }
 
 .hide {
@@ -78,6 +81,8 @@
 .stat-bar {
     height: 5px;
     width: 100%;
+    border: 1px inset gray;
+    margin-bottom: 5px;
 }
 
 .health-bar {
@@ -100,12 +105,28 @@
     background-color: gold;
 }
 
-.time-date-container {
+.weather-time-date {
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
-.date {
-    right: 0;
+.weather-time-date span {
+    text-align: center;
+}
+
+.weather, .date {
+    width: 25%;
+}
+
+.time-bar {
+    background-color: lightskyblue;
+    width: 50%;
+    height: 50%;
+    margin: 2px 0;
+    border: 1px inset gray;
+}
+
+.stat-container span{
+    padding-left: 5px;
 }
