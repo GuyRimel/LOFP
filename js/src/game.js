@@ -8,7 +8,7 @@ let Game = {
     season:"spring",
     day: 0,
     daysPerSeason: 10,
-    year: 1750,
+    year: 1660,
     minute: 480,
     minutesPerDay: 960, // 16 Hours
     wakeHour: 6,
@@ -27,7 +27,6 @@ let Game = {
     },
 
     dayEnd: function dayEnd() {
-      console.log('day Ended');
       Character.isAsleep = true;
       document.querySelector("#btn2").innerText = "sleep";
       document.querySelector(".view-container").style.backgroundColor =
@@ -86,40 +85,35 @@ let Game = {
 
   dialog: {
     say: function say(text, rate, feedback) {
-      if(Character.isBusy || !Character.isAlive){return};
-
+      if(Character.isBusy) { return }
       let feedbackElement = document.querySelector('.feedback');
       let dialogElement = document.querySelector('.dialog');
       let speakingElement = dialogElement;
-
+      
       feedbackElement.innerText = '';
       dialogElement.innerText = '';
       speakingElement.innerText = '';
-
+      
       if(feedback){
         speakingElement = feedbackElement;
       };
+      
+      let interval = setInterval(sayLetter, rate);
+      let i = 0;
+      Character.isBusy = true;
 
-
-      if (Character.isAlive && !Character.isBusy) {
-        let interval = setInterval(sayLetter, rate);
-        let i = 0;
-
-        function sayLetter() {
-          if (text.charAt(i) === " ") {
-            let spaceChar = "\xa0";
-            speakingElement.innerText += spaceChar;
-            i++;
-            Character.isBusy = true;
-          } else {
-            speakingElement.innerText += text.charAt(i);
-            i++;
-            Character.isBusy = true;
-          }
-          if (i >= text.length) {
-            clearInterval(interval);
-            Character.isBusy = false;
-          }
+      function sayLetter() {
+        if (text.charAt(i) === " ") {
+          let spaceChar = "\xa0";
+          speakingElement.innerText += spaceChar;
+          i++;
+        } else {
+          speakingElement.innerText += text.charAt(i);
+          i++;
+        }
+        if (i >= text.length) {
+          clearInterval(interval);
+          Character.isBusy = false;
         }
       }
     },

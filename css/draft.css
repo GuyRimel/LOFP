@@ -62,12 +62,14 @@
 
 .feedback {
     color: lightgray;
+    word-wrap: break-word;
 }
 
 .dialog {
     color: white;
     background-image: linear-gradient(#222, #111, #222);
     padding: 5px;
+    word-wrap: break-word;
 }
 
 .gamepad-btn {

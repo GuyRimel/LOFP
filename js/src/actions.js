@@ -15,42 +15,43 @@ let Actions = (function() {
   ];
 
   function eat() {
-    console.log('eating');
-    if(!Character.isAlive || Character.isBusy || Character.isAsleep) {return}
+    if(
+      Character.isDead ||
+      Character.isAsleep ||
+      Character.isBusy) { return }
     Game.time.changeTime(30);
-    Character.changeStat('health', 10);
     Character.changeStat('stamina', 5);
+    Character.changeStat('health', 10);
     Game.dialog.say('munch, munch - *BURP');
   }
   
   function nap() {
-    if(Character.isAsleep){
-      return sleep();
-    }else if(Character.isAlive && !Character.isBusy){
-      Game.time.changeTime(30);
-      Game.dialog.say('zzz...', 60);
-    }
+    if(Character.isAsleep) { return sleep(); }
+    Game.time.changeTime(30);
+    Character.isExhausted = false;
+    Character.changeStat('stamina', 10);
+    Game.dialog.say('zzz...', 60);
   }
-
+  
   function sleep() {
-    if(!Character.isAlive || Character.isBusy) {return}
     Character.isAsleep = false;
     Game.time.dayStart();
     document.querySelector('#btn2').innerText = "nap";
   }
   
   function think() {
-    if(!Character.isAlive || Character.isBusy || Character.isAsleep) {return}
-      Character.changeStat('stamina', -1);
-      Character.changeStat('accuracy', 10);
-      Character.changeStat('power', -10);
+    if(!Character.isAble()) { return }
+    Character.isExhausted = false;
+    Character.changeStat('stamina', -1);
+    Character.changeStat('accuracy', 10);
+    Character.changeStat('power', -10);
   }
   
   function rage() {
-    if(!Character.isAlive || Character.isBusy || Character.isAsleep) {return}
-      Character.changeStat('stamina', -3);
-      Character.changeStat('accuracy', -10);
-      Character.changeStat('power', 10);
+    if(!Character.isAble()) { return }
+    Character.changeStat('stamina', -3);
+    Character.changeStat('accuracy', -15);
+    Character.changeStat('power', 10);
   }
   
   function selectTool() {
