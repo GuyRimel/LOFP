@@ -133,6 +133,7 @@
 
 .bar-container span{
     padding-left: 5px;
+    padding-right: auto;
 }
 
 .choice {
