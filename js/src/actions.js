@@ -1,79 +1,96 @@
 let Actions = (function() {
-  let dialogContainer = document.querySelector('.dialog-container');
+  // genGame generates the 8 buttons from this array - ORDER MATTERS
   let btnArray = [
-    { name: 'eat', perform: eat },
-    { name: 'nap', perform: nap },
+    // i 0, 1, 2, 3 are the left buttons
     { name: 'think', perform: think },
-    { name: 'rage', perform: rage },
-
-    { name: 'tool', perform: selectTool },
-    { name: 'inv.', perform: inventory },
     { name: 'look', perform: look },
-    { name: 'journal', perform: journal },
+    { name: 'eat', perform: eat },
+    { name: 'drink', perform: drink },
 
-    { name: 'sleep', perform: sleep },
+    // i 4, 5, 6, 7 are the right buttons
+    { name: 'use', perform: use },
+    { name: 'tools', perform: selectTool },
+    { name: 'inv.', perform: inventory },
+    { name: 'journal', perform: journal }
   ];
+
+  // With these actions order matters - say feedback and dialog THEN "isBusy" = true
+  // otherwise isBusy = true will kill the say function
 
   function eat() {
     if(
       Character.isDead ||
       Character.isAsleep ||
       Character.isBusy) { return }
+    Character.say('munch, munch - *BURP', 20);
     Game.time.changeTime(30);
-    Character.changeStat('stamina', 2);
-    Character.changeStat('health', 8);
-    Game.dialog.say('munch, munch - *BURP');
+    let stats = ['health', 'stamina'];
+    let amounts = [8, 2];
+    Character.changeStats(stats, amounts);
   }
   
-  function nap() {
-    if(Character.isAsleep) { return sleep(); }
+  function drink() {
+    if(
+      Character.isDead ||
+      Character.isAsleep ||
+      Character.isBusy) { return }
     Game.time.changeTime(30);
-    Character.isExhausted = false;
     Character.changeStat('stamina', 10);
-    Game.dialog.say('zzz...', 60);
-  }
-  
-  function sleep() {
-    document.querySelector('#btn2').innerText = "nap";
-    Character.isAsleep = false;
-    Game.time.dayStart();
+    Character.say('*gulp *gulp - hah!', 20);
   }
   
   function think() {
     if(!Character.isAble()) { return }
-    Character.isExhausted = false;
-    Character.changeStat('stamina', -1);
-    Character.changeStat('accuracy', 5);
-    Character.changeStat('power', -5);
+    let stats = ['stamina', 'skill', 'power']
+    let amounts = [-20, 5, -5];
+    Character.changeStats(stats, amounts);
+    Game.time.changeTime(100);
   }
   
-  function rage() {
+  function look() {
     if(!Character.isAble()) { return }
-    Character.changeStat('stamina', -3);
-    Character.changeStat('accuracy', -5);
-    Character.changeStat('power', 5);
+    Game.ask(0);
   }
   
   function selectTool() {
-  
+    document.querySelector('.journal-container').classList.add('hide');
+    document.querySelector('.inventory-container').classList.add('hide');
+    document.querySelector('.tools-container').classList.remove('hide');
   }
   
   function inventory() {
     document.querySelector('.journal-container').classList.add('hide');
+    document.querySelector('.tools-container').classList.add('hide');
     document.querySelector('.inventory-container').classList.remove('hide');
   }
   
-  function look() {
-  
+  function use() {
+    
   }
   
   function journal() {
     document.querySelector('.inventory-container').classList.add('hide');
+    document.querySelector('.tools-container').classList.add('hide');
     document.querySelector('.journal-container').classList.remove('hide');
+  }
+  
+  function snooze() {
+    Game.time.snoozes ++;
+    setTimeout( () => { Game.time.changeTime(30) }, 2000);
+    Character.say('zzzz. . . . .', 100);
+  }
+  
+  function dream() {
+    if(Character.isExhausted) { return }
+    setTimeout( () => { Game.time.changeTime(30) }, 2000);
+    Character.changeStat('luck', 3);
+    Character.say('hmmm.. mMMMmm!!!', 100);
   }
 
   return {
     btnArray: btnArray,
+    snooze: snooze,
+    dream: dream
   }
 
 })();

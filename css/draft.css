@@ -53,7 +53,7 @@
 }
 
 .dialog-container {
-    background-color: #222;
+    background-image: linear-gradient(#222, #111, #222);
     display: flex;
     flex-flow: column wrap;
     justify-content: space-evenly;
@@ -62,14 +62,16 @@
 
 .feedback {
     color: lightgray;
-    word-wrap: break-word;
 }
 
 .dialog {
-    color: white;
-    background-image: linear-gradient(#222, #111, #222);
+    color: cyan;
     padding: 5px;
-    word-wrap: break-word;
+}
+
+.choices {
+    color: lightgray;
+    padding: 5px;
 }
 
 .gamepad-btn {
@@ -80,7 +82,7 @@
     display: none;
 }
     
-.stat-bar {
+.bar {
     height: 5px;
     width: 100%;
     border: 1px inset gray;
@@ -95,7 +97,7 @@
     background-color: lime;
 }
 
-.accuracy-bar {
+.skill-bar {
     background-color: turquoise;
 }
 
@@ -129,6 +131,10 @@
     border: 1px inset gray;
 }
 
-.stat-container span{
+.bar-container span{
     padding-left: 5px;
+}
+
+.choice {
+    padding: 0 15px;
 }
