@@ -1,7 +1,17 @@
 
 // genGame is composed of generating each html container contents
-function genGame() {
+let genGame = (function genGame() {
   // the left container is for Stats
+  
+  function genNameContainer() {
+    let container = document.querySelector('.name-container');
+    let name = document.createElement('div');
+
+    name.innerText = Character.name;
+
+    container.appendChild(name);
+  }
+
   function genLeftContainer() {
     let leftContainer = document.querySelector('.left-container');
     let statsList = Object.keys(Character.stats);
@@ -142,17 +152,17 @@ function genGame() {
   function genViewContainer() {
 
   }
-
-  genLeftContainer();
+  
+  genNameContainer();
   genHeaderContainer();
+  genLeftContainer();
   genFunctionBtnContainer();
   genRightContainer();
   genBtnContainers();
   genDialogContainer();
   genViewContainer();
   Game.time.dayStart();
-}
+})();
 
-genGame();
 Character.update();
 Game.update();
