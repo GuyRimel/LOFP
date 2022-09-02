@@ -8,6 +8,7 @@ let Character = {
   isExhausted: false,
   isBusy: false,
   snoozes: 0,
+  snoozeDuration: 30,
   
     stats: {
       xp: 0,
@@ -55,12 +56,14 @@ let Character = {
       Character.stats[stat] += amounts[amount];
 
       let statValue = Character.stats[stat];
+      let statMax = Character.statMaximums[`${stat}Max`];
       let statBar = document.querySelector(`.${stat}-bar`);
       let statSpan = statBar.previousElementSibling;
+      let percentFull = statValue / statMax * 100;
 
-      if(statValue > 100) {
-        Character.stats[stat] = 100;
-        statValue = 100;
+      if(statValue > statMax) {
+        Character.stats[stat] = statMax;
+        statValue = statMax;
       }
       if(statValue < 0) {
         Character.stats[stat] = 0;
@@ -68,7 +71,7 @@ let Character = {
       }
 
       statSpan.innerText = statValue;
-      statBar.style.width = `${statValue}%`;
+      statBar.style.width = `${percentFull}%`;
     });
     
     (Character.stats.health <= 0) ?

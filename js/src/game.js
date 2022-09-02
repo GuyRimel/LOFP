@@ -18,15 +18,9 @@ let Game = {
       let weather = document.querySelector(".weather");
       weather.innerText = Game.weather[Math.floor(Math.random() * 5)];
       Game.time.day++;
-      Game.time.setDate();
-      Character.isAsleep = false;
-      Character.snoozes = 0;
       Game.time.minute = 0;
+      Game.time.setDate();
       Game.time.changeTime(0);
-      Game.converse(
-        '*ssttreeetch... *sips coffee* ...',
-        "Goodmorning!",
-        500);
     },
     
     dayEnd: function dayEnd() {
@@ -133,19 +127,20 @@ let Game = {
     }
   },
   
-  // predefined conversational timing between the game and character
-  // character says immediately -> game says after delay -> character shushes after delay + 1sec
+  // predefined conversational timing between the game and character (don't mess with these numbers!)
+  // character says immediately -> game says after delay -> character shushes after delay + 800ms
   converse: function converse(charSays, gameSays, delay) {
     if(Game.isConversing) { return }
     Game.isConversing = true;
-
     let charSpeakingRate = 0;
     if(delay >= 2000) { charSpeakingRate = 50; }
 
     Game.shush();
     
     Character.say(charSays, charSpeakingRate);
+    if(delay >= 2000) { delay += 1000; }
     setTimeout(() => Game.say(gameSays), delay);
+
     setTimeout(()=> {
       Game.shush('.dialog');
       Game.isConversing = false;
@@ -184,25 +179,25 @@ let Game = {
       question: "You're asleep... wakey wakey?",
       choices: ['lets get up!', '... zzz', 'keep dreaming'],
       responses: [
-        () => { Game.time.dayStart(); },
+        () => { Actions.wake(); },
         () => { Actions.snooze(); },
         () => { Actions.dream(); }
       ]
     }, { // question 2, tied to Character.snoozes > 0
-      question: "You snooze... is it time to wake up now?",
+      question: "... is it time to wake up now?",
       choices: ['the sun is uuup!', '... z z z', 'dreeeeam'],
       responses: [
-        () => { Game.time.dayStart(); },
+        () => { Actions.wake(); },
         () => { Actions.snooze(); },
         () => { Actions.dream(); }
       ]
     }, { // question 3, tied to Character.checkup(), Character.isAsleep = true, Character.snoozes > 3
       question: "... okay GET UP!!!",
-      choices: ['lets get up!', '*yawn', '...'],
+      choices: ['lets get up!', 'fiiine...', '*grumble'],
       responses: [
-        () => { Game.time.dayStart(); },
-        () => { Game.time.dayStart(); },
-        () => { Game.time.dayStart(); }
+        () => { Actions.wake(); },
+        () => { Actions.wake(); },
+        () => { Actions.wake(); }
       ]
     }
   ],

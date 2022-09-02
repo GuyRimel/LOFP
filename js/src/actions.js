@@ -24,7 +24,7 @@ let Actions = (function() {
 
     Game.time.changeTime(30);
     let stats = ['health', 'stamina'];
-    let amounts = [8, 2];
+    let amounts = [2, 1];
     Character.changeStats(stats, amounts);
     Game.converse(
       'munch, munch - *BURP',
@@ -39,7 +39,7 @@ let Actions = (function() {
     if(Game.isConversing || !Character.isAble()) { return }
 
     Game.time.changeTime(30);
-    Character.changeStat('stamina', 10);
+    Character.changeStat('stamina', 2);
     Game.converse(
       '*gulp *gulp - hah!',
       'you drink a cool refreshment...',
@@ -52,7 +52,7 @@ let Actions = (function() {
     if(Game.isConversing || !Character.isAble()) { return }
     
     let stats = ['stamina', 'skill', 'power']
-    let amounts = [-2, 5, -5];
+    let amounts = [-2, 2, -2];
     Character.changeStats(stats, amounts);
     
     Game.time.changeTime(500);
@@ -92,24 +92,45 @@ let Actions = (function() {
     document.querySelector('.tools-container').classList.add('hide');
     document.querySelector('.journal-container').classList.remove('hide');
   }
+
+  function wake() {
+    Game.time.dayStart()
+    let snoozeModifier = Character.snoozes * Character.snoozeDuration;
+    Game.time.changeTime(snoozeModifier);
+    Character.changeStats(['health', 'stamina'], [3, 3]);
+    Character.isAsleep = false;
+    Character.snoozes = 0;
+
+    Game.converse(
+      '*ssttreeetch... *sips coffee* ...',
+      "Goodmorning!",
+      500);
+  }
   
   // snooze and dream are available if Character.isAsleep = true
   function snooze() {
+    if(Character.snoozes === 0) {
+      Game.time.dayStart(); }
     Character.snoozes ++;
-    Character.changeStat('health', 3);
-    Game.time.changeTime(30);
+    Character.changeStats(['health', 'stamina'], [2, 2]);
+    Game.time.changeTime(Character.snoozeDuration);
+    Game.say('you snooze...');
     setTimeout( Character.checkup, 1000);
   }
   
   function dream() {
+    if(Character.snoozes === 0) {
+      Game.time.dayStart(); }
     Character.snoozes ++;
-    Character.changeStat('luck', 3);
-    Game.time.changeTime(30);
+    Character.changeStats(['luck', 'stamina'], [2, 2]);
+    Game.time.changeTime(Character.snoozeDuration);
+    Game.say('you keep dreaming...');
     setTimeout( Character.checkup, 1000);
   }
 
   return {
     btnArray: btnArray,
+    wake: wake,
     snooze: snooze,
     dream: dream
   }
