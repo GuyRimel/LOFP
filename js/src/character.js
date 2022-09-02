@@ -2,28 +2,53 @@
 let Character = {
   name: "Francis",
   level: 1,
+  xpTilLevelup: 1000,
   isDead: false,
   isAsleep: false,
-  isBusy: false,
   isExhausted: false,
+  isBusy: false,
+  snoozes: 0,
+  
+    stats: {
+      xp: 0,
+      health: 10,
+      stamina: 10,
+      skill: 10,
+      power: 10,
+      luck: 10
+    },
+
+    statMaximums: {
+      xpMax: 10,
+      healthMax: 10,
+      staminaMax: 10,
+      skillMax: 10,
+      skillMax: 10,
+      powerMax: 10,
+      luckMax: 10,
+    },
+
   isAble: () => {
     if(
       Character.isDead ||
       Character.isAsleep ||
       Character.isBusy ||
-      Character.isExhausted
+      Character.isExhausted ||
+      Game.isConversing
     ){ return false }
     else{ return true }
   },
-  stats: {
-    exp: 0,
-    health: 10,
-    stamina: 50,
-    skill: 50,
-    power: 50,
-    luck: 50
+
+  checkup() {
+    if(Character.isDead) { return Character.death(); }
+    if(Character.isExhausted) { return Character.exhausted(); }
+    if(Character.isAsleep) {
+      if(Character.snoozes === 0) { return Game.ask(1); }
+      if(Character.snoozes < 3) { return Game.ask(2); }
+      else{ return Game.ask(3); }
+    }
   },
-  
+
   // this is meant to take corresponding ARRAYS
   changeStats: (stats, amounts) => {
     stats.forEach( (stat, amount) => {
@@ -46,9 +71,10 @@ let Character = {
       statBar.style.width = `${statValue}%`;
     });
     
-    if(Character.stats.health <= 0) { return Character.death(); }
-    if(Character.stats.stamina <= 0) { return Character.exhausted(); }
-    else{ Character.isExhausted = false; }
+    (Character.stats.health <= 0) ?
+      Character.isDead = true : Character.isDead = false;
+    (Character.stats.stamina <= 0) ?
+      Character.isExhausted = true : Character.isExhausted = false;
   },
   
   changeStat: (stat, amount) => {
@@ -57,7 +83,7 @@ let Character = {
 
   say: function say(text, rate) {
     let dialogElement = document.querySelector('.dialog');
-    Game.shush();
+    Game.shush('.dialog');
     
     let iterate = setInterval(sayChar, rate);
     let i = 0;
@@ -83,9 +109,11 @@ let Character = {
   },
   
   exhausted: function() {
-    Character.isExhausted = true;
-    Game.say(`You are exhausted! Eat or drink!`, 20);
-    Character.say(`*huff *huff... UUUGHH...`, 50);
+    Game.converse(
+      '*huff *huff... UUUGHH...',
+      'You are exhausted! Eat or drink!',
+      2000
+    )
   },
   
   death: function() {

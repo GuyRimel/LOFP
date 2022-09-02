@@ -14,41 +14,60 @@ let Actions = (function() {
     { name: 'journal', perform: journal }
   ];
 
-  // With these actions order matters - say feedback and dialog THEN "isBusy" = true
-  // otherwise isBusy = true will kill the say function
-
+  // with these actions order matters
+  // first, cure status ailments (if applicable)
+  // then, short circuit if the game is conversing or 
   function eat() {
-    if(
-      Character.isDead ||
-      Character.isAsleep ||
-      Character.isBusy) { return }
-    Character.say('munch, munch - *BURP', 20);
+    Character.isExhausted = false;
+    Character.checkup();
+    if(Game.isConversing || !Character.isAble()) { return }
+
     Game.time.changeTime(30);
     let stats = ['health', 'stamina'];
     let amounts = [8, 2];
     Character.changeStats(stats, amounts);
+    Game.converse(
+      'munch, munch - *BURP',
+      'you snack on food...',
+      300
+    );
   }
   
   function drink() {
-    if(
-      Character.isDead ||
-      Character.isAsleep ||
-      Character.isBusy) { return }
+    Character.isExhausted = false;
+    Character.checkup();
+    if(Game.isConversing || !Character.isAble()) { return }
+
     Game.time.changeTime(30);
     Character.changeStat('stamina', 10);
-    Character.say('*gulp *gulp - hah!', 20);
+    Game.converse(
+      '*gulp *gulp - hah!',
+      'you drink a cool refreshment...',
+      300
+    );
   }
   
   function think() {
-    if(!Character.isAble()) { return }
+    Character.checkup();
+    if(Game.isConversing || !Character.isAble()) { return }
+    
     let stats = ['stamina', 'skill', 'power']
-    let amounts = [-20, 5, -5];
+    let amounts = [-2, 5, -5];
     Character.changeStats(stats, amounts);
-    Game.time.changeTime(100);
+    
+    Game.time.changeTime(500);
+    if(Character.isAsleep) { return }
+
+    Game.converse(
+      'hmm... carry the three... then, express the derivative..',
+      'you are thinking...',
+      1500
+      );
   }
   
   function look() {
-    if(!Character.isAble()) { return }
+    Character.checkup();
+    if(Game.isConversing || !Character.isAble()) { return }
     Game.ask(0);
   }
   
@@ -74,17 +93,19 @@ let Actions = (function() {
     document.querySelector('.journal-container').classList.remove('hide');
   }
   
+  // snooze and dream are available if Character.isAsleep = true
   function snooze() {
-    Game.time.snoozes ++;
-    setTimeout( () => { Game.time.changeTime(30) }, 2000);
-    Character.say('zzzz. . . . .', 100);
+    Character.snoozes ++;
+    Character.changeStat('health', 3);
+    Game.time.changeTime(30);
+    setTimeout( Character.checkup, 1000);
   }
   
   function dream() {
-    if(Character.isExhausted) { return }
-    setTimeout( () => { Game.time.changeTime(30) }, 2000);
+    Character.snoozes ++;
     Character.changeStat('luck', 3);
-    Character.say('hmmm.. mMMMmm!!!', 100);
+    Game.time.changeTime(30);
+    setTimeout( Character.checkup, 1000);
   }
 
   return {
