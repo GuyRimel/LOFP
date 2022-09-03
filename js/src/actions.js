@@ -59,7 +59,7 @@ let Actions = (function() {
     if(Character.isAsleep) { return }
 
     Game.converse(
-      'hmm... carry the three... then, express the derivative..',
+      'hmm... carry the three... then, express the derivative, and carry the seven...',
       'you are thinking...',
       1500
       );

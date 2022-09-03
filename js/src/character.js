@@ -60,8 +60,7 @@ let Character = {
       let statMax = Character.statMaximums[`${stat}Max`];
       let statBar = document.querySelector(`.${stat}-bar`);
       let statSpan = statBar.previousElementSibling;
-      let percentFull = statValue / statMax * 100;
-
+      
       if(statValue > statMax) {
         Character.stats[stat] = statMax;
         statValue = statMax;
@@ -70,7 +69,8 @@ let Character = {
         Character.stats[stat] = 0;
         statValue = 0
       }
-
+      
+      let percentFull = statValue / statMax * 100;
       statSpan.innerText = statValue;
       statBar.style.width = `${percentFull}%`;
     });

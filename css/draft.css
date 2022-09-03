@@ -7,6 +7,9 @@
 .fullscreen-grid {
     display: grid;
     height: 100vh;
+}
+
+.game-screen {
     grid-template-columns: 120px 100fr 120px;
     grid-template-rows: 2em 100fr 120px;
 }
@@ -43,12 +46,7 @@
     align-items: center;
 }
 
-.left-btn-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.right-btn-container {
+.left-btn-container, .right-btn-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
@@ -60,9 +58,16 @@
 .dialog-container {
     background-image: linear-gradient(#222, #111, #222);
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column;
     justify-content: space-evenly;
     align-items: center;
+}
+
+.feedback, .dialog, .choices {
+    text-align: center;
+    inline-size: 100%;
+    overflow-wrap: break-word;
+    padding: 5px;
 }
 
 .feedback {
@@ -71,27 +76,23 @@
 
 .dialog {
     color: cyan;
-    padding: 5px;
 }
 
 .choices {
     color: lightgray;
-    padding: 5px;
 }
 
 .gamepad-btn {
     border-radius: 5px;
 }
 
-.hide {
-    display: none;
+.bar-container {
+    margin-bottom: 5px;
 }
 
 .bar {
     height: 5px;
-    width: 100%;
     border: 1px inset gray;
-    margin-bottom: 5px;
 }
 
 .level-bar {
@@ -133,13 +134,12 @@
 }
 
 .weather, .date {
-    width: 25%;
+    width: 33%;
 }
 
 .time-bar {
     background-color: lightskyblue;
-    width: 50%;
-    height: 50%;
+    height: .5em;
     margin: 2px 0;
     border: 1px inset gray;
 }
@@ -153,19 +153,82 @@
     padding: 0 15px;
 }
 
-/* this forces landscape!!! */
+.modal-screen {
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background-color: beige;
+    border: 2px inset tan;
+    border-radius: 5px;
+    width: 80vh;
+    height: 80vh;
+}
+
+/* mobile portrait settings */
 @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
-    html {
-      transform: rotate(-90deg);
-      transform-origin: left top;
-      width: 100vh;
-      height: 100vw;
-      overflow-x: hidden;
-      position: absolute;
-      top: 100%;
-      left: 0;
+    .game-screen {
+        grid-template-rows: 1.5em 2em 2fr 120px 100px 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     }
-    .fullscreen-grid {
-        height: 100vw;
+    
+    .name-container {
+        grid-row: 1;
+        grid-column: 1 / 5;
+    }
+
+    .function-btn-container {
+        grid-row: 1;
+        grid-column: 5 / 7;
+    }
+    
+    .header-container {
+        grid-row: 2;
+        grid-column: 1 / 7;
+    }
+    
+    .view-container {
+        grid-row: 3;
+        grid-column: 1 / 7;
+    }
+    
+    .dialog-container {
+        grid-row: 4;
+        grid-column: 1 / 7;
+    }
+    
+    .left-btn-container {
+        grid-row: 5;
+        grid-column: 1 / 4;
+    }
+    
+    .right-btn-container {
+        grid-row: 5;
+        grid-column: 4 / 7;
+    }
+    
+    .left-container {
+        grid-row: 6;
+        grid-column: 1 / 4;
+    }
+    
+    .right-container {
+        grid-row: 6;
+        grid-column: 4 / 7;
+    }
+
+    .modal {
+        width: 80vw;
+        height: 80vw;
     }
   }
+
+  
+/* utilities -- note: keep '.hide' at the bottom */
+.hide {
+    display: none;
+}

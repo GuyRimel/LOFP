@@ -128,25 +128,33 @@ let Game = {
   },
   
   // predefined conversational timing between the game and character (don't mess with these numbers!)
-  // character says immediately -> game says after delay -> character shushes after delay + 800ms
   converse: function converse(charSays, gameSays, delay) {
     if(Game.isConversing) { return }
     Game.isConversing = true;
+
+    // order of events: shush both > charSays > gameSays > shush char
+    // 'delay' is when the game responds
+    //charSpeakingRate is passed to the setInterval func in Character.say()
+    let charShushDelay = delay + 800;
     let charSpeakingRate = 0;
-    if(delay >= 2000) { charSpeakingRate = 50; }
-
-    Game.shush();
+    if(delay >= 2500) { 
+      charSpeakingRate = 50;
+      charShushDelay += 1000; };
     
+    Game.shush();
     Character.say(charSays, charSpeakingRate);
-    if(delay >= 2000) { delay += 1000; }
+    
     setTimeout(() => Game.say(gameSays), delay);
-
     setTimeout(()=> {
       Game.shush('.dialog');
       Game.isConversing = false;
-      }, delay + 800);
+      }, charShushDelay);
   },
 
+  // this is where the magic happens
+  // first, trigger "Game.ask(#)" which sets the currentQuestion
+  // the user is prompted with the question, and choices generate
+  // the response is what happens depending on their choice
   currentQuestion: null,
   questions: [
     { // question 0, tied to "Action.look()"
@@ -164,7 +172,7 @@ let Game = {
           Game.converse(
             'perhaps the answer is within this coconut . . .',
             '... nope...',
-            2000
+            2500
           )
         },
         () => {
