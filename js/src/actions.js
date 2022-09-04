@@ -9,7 +9,7 @@ let Actions = (function() {
 
     // i 4, 5, 6, 7 are the right buttons
     { name: 'use', perform: use },
-    { name: 'tools', perform: selectTool },
+    { name: 'equip', perform: showEquip },
     { name: 'inv.', perform: inventory },
     { name: 'journal', perform: journal }
   ];
@@ -71,15 +71,15 @@ let Actions = (function() {
     Game.ask(0);
   }
   
-  function selectTool() {
+  function showEquip() {
     document.querySelector('.journal-container').classList.add('hide');
     document.querySelector('.inventory-container').classList.add('hide');
-    document.querySelector('.tools-container').classList.remove('hide');
+    document.querySelector('.equipment-container').classList.remove('hide');
   }
   
   function inventory() {
     document.querySelector('.journal-container').classList.add('hide');
-    document.querySelector('.tools-container').classList.add('hide');
+    document.querySelector('.equipment-container').classList.add('hide');
     document.querySelector('.inventory-container').classList.remove('hide');
   }
   
@@ -89,7 +89,7 @@ let Actions = (function() {
   
   function journal() {
     document.querySelector('.inventory-container').classList.add('hide');
-    document.querySelector('.tools-container').classList.add('hide');
+    document.querySelector('.equipment-container').classList.add('hide');
     document.querySelector('.journal-container').classList.remove('hide');
   }
 

@@ -74,40 +74,67 @@ let genGame = (function genGame() {
     container.appendChild(infoBtn);
   }
 
-  // the right container is toggled to show the tools, journal, inventory
-  function genRightContainer() {
-    let container = document.querySelector('.right-container');
+  // the right container is toggled to show the equipment, journal, inventory
+  function genUtilityContainer() {
+    let container = document.querySelector('.utility-container');
     let journalContainer = document.createElement('div');
     let inventoryContainer = document.createElement('div');
-    let toolsContainer = document.createElement('div');
+    let equipmentContainer = document.createElement('div');
     
-    for(i=0; i<20; i++){
-      let inventoryElement = document.createElement('div');
-      let inventoryImg = document.createElement('img');
-      let inventoryAmt = document.createElement('span');
-
-      inventoryElement.classList.add('invItem', `inv${i}`);
-      inventoryElement.addEventListener( 'click', (e) => {
-        console.log(e.target)
-      });
-
-      inventoryImg.src = `..\\..\\img\\inv.gif`;
-      inventoryAmt.innerText = i;
-      inventoryElement.appendChild(inventoryImg);
-      inventoryElement.appendChild(inventoryAmt);
-      inventoryContainer.appendChild(inventoryElement);
-      console.log(`inv${i} created`);
-    }
-
+    (function genInventory() {
+      for(i=0; i<20; i++){
+        let inventoryElement = document.createElement('div');
+        let inventoryImg = document.createElement('img');
+        let inventoryAmt = document.createElement('span');
+  
+        inventoryElement.classList.add('invItem', `inv${i}`);
+        inventoryElement.addEventListener( 'click', (e) => {
+          console.log(e.target);
+        });
+  
+        inventoryImg.src = `..\\..\\img\\inv.gif`;
+        inventoryAmt.innerText = i;
+        inventoryElement.appendChild(inventoryImg);
+        inventoryElement.appendChild(inventoryAmt);
+        inventoryContainer.appendChild(inventoryElement);
+        container.appendChild(inventoryContainer);
+        inventoryContainer.classList.add('inventory-container', 'hide');
+      }
+    })();
+    
+    (function genEquip() {
+      for(i=0; i<5; i++){
+        let equipmentElement = document.createElement('div');
+        let equipmentImg = document.createElement('img');
+        let equipmentLvl = document.createElement('span');
+        let equipmentName = document.createElement('strong');
+        let equipmentBar = document.createElement('div');
+  
+        equipmentElement.classList.add('equipItem', `equip${i}`);
+        equipmentElement.addEventListener( 'click', (e) => {
+          console.log(e.target);
+        });
+        
+        equipmentImg.src = `..\\..\\img\\inv.gif`;
+        equipmentName.innerText = 'equipment' + i;
+        equipmentLvl.innerText = i;
+        equipmentBar.classList.add('bar', `equip-bar${i}`);
+        equipmentElement.appendChild(equipmentImg);
+        equipmentElement.appendChild(equipmentName);
+        equipmentName.appendChild(equipmentLvl);
+        equipmentElement.appendChild(equipmentBar);
+        equipmentContainer.appendChild(equipmentElement);
+        container.appendChild(equipmentContainer);
+        equipmentContainer.classList.add('equipment-container', 'bar-container');
+      }
+    })();
+    
+    journalContainer.innerText = 'this is the journal', 'hide';
     journalContainer.classList.add('journal-container', 'hide');
-    journalContainer.innerText = 'this is the journal';
-    inventoryContainer.classList.add('inventory-container');
-    toolsContainer.classList.add('tools-container', 'hide');
-    toolsContainer.innerText = 'this is the tools container';
+    equipmentContainer.classList.add('equipment-container');
 
     container.appendChild(journalContainer);
-    container.appendChild(inventoryContainer);
-    container.appendChild(toolsContainer);
+    container.appendChild(equipmentContainer);
   }
 
   // left btn container is usually "eat" "nap" "think" "rage"
@@ -127,6 +154,7 @@ let genGame = (function genGame() {
       button.classList.add('gamepad-btn');
       button.id = `btn${i}`;
       // now, the buttonAction string becomes the name of a function in the button's eventListener
+      // note: #btn4, 5, 6, & 7 remain "selected" once clicked
       button.addEventListener('click', (e) => { 
         buttonAction();
         if(container !== leftBtnContainer) {
@@ -182,7 +210,7 @@ let genGame = (function genGame() {
   genHeaderContainer();
   genLeftContainer();
   genFunctionBtnContainer();
-  genRightContainer();
+  genUtilityContainer();
   genBtnContainers();
   genDialogContainer();
   genViewContainer();
