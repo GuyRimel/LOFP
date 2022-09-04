@@ -10,8 +10,8 @@
 }
 
 .game-screen {
-    grid-template-columns: 120px 100fr 120px;
-    grid-template-rows: 2em 100fr 120px;
+    grid-template-columns: 120px 1fr 120px;
+    grid-template-rows: 2em calc(100vh - 2em - 120px) 120px;
 }
 
 .grid-item {
@@ -31,6 +31,7 @@
 
 .left-container {
     background-color: #efefef;
+    overflow: auto;
 }
 
 .header-container {
@@ -169,10 +170,51 @@
     height: 80vh;
 }
 
+.inventory-container {
+    display: grid;
+    height: auto;
+    overflow: auto;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* the height is 60px to make a square (container is 120px wide with 2 cols) */
+.invItem {
+    background-color: #baa;
+    width: 100%;
+    height: 60px;
+    position: relative;
+}
+
+.invItem img {
+    width: 100%;
+    padding: 3px;
+    border: 1px inset tan;
+}
+
+.invItem div, .invItem span {
+    padding: 3px;
+    margin: 3px;
+}
+
+.invItem div {
+    background-image: linear-gradient(#00000011, #00000033);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.invItem span {
+    background-image: radial-gradient(#00000011, #00000033);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 50%;
+}
+
 /* mobile portrait settings */
 @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
     .game-screen {
-        grid-template-rows: 1.5em 2em 2fr 120px 100px 1fr;
+        grid-template-rows: 1.5em 2em 1fr 120px 100px 200px;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     }
     
@@ -224,6 +266,10 @@
     .modal {
         width: 80vw;
         height: 80vw;
+    }
+
+    .invItem {
+        height: 25vw;
     }
   }
 

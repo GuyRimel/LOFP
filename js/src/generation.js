@@ -80,11 +80,31 @@ let genGame = (function genGame() {
     let journalContainer = document.createElement('div');
     let inventoryContainer = document.createElement('div');
     let toolsContainer = document.createElement('div');
+    
+    for(i=0; i<20; i++){
+      let inventoryElement = document.createElement('div');
+      let inventoryImg = document.createElement('img');
+      let inventoryName = document.createElement('div');
+      let inventoryAmt = document.createElement('span');
 
-    journalContainer.classList.add('journal-container');
+      inventoryElement.classList.add('invItem', `inv${i}`);
+      inventoryElement.addEventListener( 'click', (e) => {
+        console.log(e.target)
+      });
+
+      inventoryImg.src = `..\\..\\img\\inv.gif`;
+      inventoryName.innerText = `inv${i}`;
+      inventoryAmt.innerText = 12;
+      inventoryElement.appendChild(inventoryImg);
+      inventoryElement.appendChild(inventoryName);
+      inventoryElement.appendChild(inventoryAmt);
+      inventoryContainer.appendChild(inventoryElement);
+      console.log(`inv${i} created`);
+    }
+
+    journalContainer.classList.add('journal-container', 'hide');
     journalContainer.innerText = 'this is the journal';
-    inventoryContainer.classList.add('inventory-container', 'hide');
-    inventoryContainer.innerText = 'this is the inventory';
+    inventoryContainer.classList.add('inventory-container');
     toolsContainer.classList.add('tools-container', 'hide');
     toolsContainer.innerText = 'this is the tools container';
 
