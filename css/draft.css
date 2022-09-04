@@ -171,6 +171,7 @@
 }
 
 .inventory-container {
+    background-color: #444;
     display: grid;
     height: auto;
     overflow: auto;
@@ -179,10 +180,14 @@
 
 /* the height is 60px to make a square (container is 120px wide with 2 cols) */
 .invItem {
-    background-color: #baa;
+    background-color: #a29393;
     width: 100%;
     height: 60px;
     position: relative;
+}
+
+.invItem:active {
+    transform: translateY(3px);
 }
 
 .invItem img {
@@ -191,16 +196,14 @@
     border: 1px inset tan;
 }
 
-.invItem div, .invItem span {
-    padding: 3px;
+.invItem span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2em;
+    height: 2em;
     margin: 3px;
-}
-
-.invItem div {
-    background-image: linear-gradient(#00000011, #00000033);
-    position: absolute;
-    top: 0;
-    left: 0;
+    padding: 3px;
 }
 
 .invItem span {
@@ -209,6 +212,10 @@
     bottom: 0;
     right: 0;
     border-radius: 50%;
+}
+
+.selected, .gamepad-btn:active {
+    border: 1px solid cyan;
 }
 
 /* mobile portrait settings */

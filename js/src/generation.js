@@ -84,7 +84,6 @@ let genGame = (function genGame() {
     for(i=0; i<20; i++){
       let inventoryElement = document.createElement('div');
       let inventoryImg = document.createElement('img');
-      let inventoryName = document.createElement('div');
       let inventoryAmt = document.createElement('span');
 
       inventoryElement.classList.add('invItem', `inv${i}`);
@@ -93,10 +92,8 @@ let genGame = (function genGame() {
       });
 
       inventoryImg.src = `..\\..\\img\\inv.gif`;
-      inventoryName.innerText = `inv${i}`;
-      inventoryAmt.innerText = 12;
+      inventoryAmt.innerText = i;
       inventoryElement.appendChild(inventoryImg);
-      inventoryElement.appendChild(inventoryName);
       inventoryElement.appendChild(inventoryAmt);
       inventoryContainer.appendChild(inventoryElement);
       console.log(`inv${i} created`);
@@ -120,7 +117,7 @@ let genGame = (function genGame() {
     let rightBtnContainer = document.querySelector('.right-btn-container');
     let container = leftBtnContainer;
 
-    function genBtns(container) {
+    function genBtns(container, i) {
       let button = document.createElement('button');
       let buttonName = Actions.btnArray[i].name;
       // buttonAction is set to a string from the current index of Actions.btnArray
@@ -128,16 +125,24 @@ let genGame = (function genGame() {
 
       button.innerText = buttonName;
       button.classList.add('gamepad-btn');
-      button.id = `btn${i+1}`;
+      button.id = `btn${i}`;
       // now, the buttonAction string becomes the name of a function in the button's eventListener
-      button.addEventListener('click', (event) => buttonAction() );
+      button.addEventListener('click', (e) => { 
+        buttonAction();
+        if(container !== leftBtnContainer) {
+          for(i=4; i<8; i++){
+            document.querySelector(`#btn${i}`).classList.remove('selected');
+          }
+          e.target.classList.add('selected');
+        }
+      });
       container.appendChild(button);
     }
 
     // the left 
     for(i = 0; i < 8; i++) {
       if(i > 3) { container = rightBtnContainer }
-      genBtns(container);
+      genBtns(container, i);
     }
   }
 
