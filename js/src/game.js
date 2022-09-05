@@ -77,28 +77,10 @@ let Game = {
     },
   },
 
-  say: function say(text, rate) {
+  say: function say(text) {
     let feedbackElement = document.querySelector('.feedback');
     Game.shush('.feedback');
-
-    let interval = setInterval(sayLetter, rate);
-    let i = 0;
-    Character.isBusy = true;
-
-    function sayLetter() {
-      if (text.charAt(i) === " ") {
-        let spaceChar = "\xa0";
-        feedbackElement.innerText += spaceChar;
-        i++;
-      } else {
-        feedbackElement.innerText += text.charAt(i);
-        i++;
-      }
-      if (i >= text.length) {
-        clearInterval(interval);
-        Character.isBusy = false;
-      }
-    }
+    feedbackElement.innerText = text;
   },
 
   // here is where the Game.currentQuestion is set
@@ -129,28 +111,19 @@ let Game = {
     }
   },
   
-  // predefined conversational timing between the game and character (don't mess with these numbers!)
+  // predefined conversational timing between the game and character
   converse: function converse(charSays, gameSays, delay) {
     if(Game.isConversing) { return }
     Game.isConversing = true;
-
-    // order of events: shush both > charSays > gameSays > shush char
-    // 'delay' is when the game responds
-    //charSpeakingRate is passed to the setInterval func in Character.say()
-    let charShushDelay = delay + 800;
-    let charSpeakingRate = 0;
-    if(delay >= 2500) { 
-      charSpeakingRate = 50;
-      charShushDelay += 1000; };
     
+    // order of events: shush both > charSays > gameSays
+    // 'delay' is when the game responds
+    let charSpeakingRate = Math.floor(delay / charSays.length);
+    if( charSpeakingRate < 10 ) { charSpeakingRate = 10; }
     Game.shush();
     Character.say(charSays, charSpeakingRate);
-    
-    setTimeout(() => Game.say(gameSays), delay);
-    setTimeout(()=> {
-      Game.shush('.dialog');
-      Game.isConversing = false;
-      }, charShushDelay);
+    setTimeout(() => Game.say(gameSays), delay + 400);
+    Game.isConversing = false;
   },
 
   // this is where the magic happens
@@ -161,8 +134,15 @@ let Game = {
   questions: [
     { // question 0, tied to "Action.look()"
       question: 'Look for what?',
-      choices: ['supplies', 'answers', 'a FIGHT!'],
+      choices: ['a FIGHT!', 'supplies', 'the shop-bird'],
       responses: [
+        () => {
+          Game.converse(
+            'LETS FIGHT, FOOL!',
+            'fight!',
+            500
+          )
+        },
         () => {
           Game.converse(
             'hmm... lets seeee...',
@@ -172,16 +152,9 @@ let Game = {
         },
         () => {
           Game.converse(
-            'perhaps the answer is within this coconut . . .',
-            '... nope...',
-            2500
-          )
-        },
-        () => {
-          Game.converse(
-            'LETS FIGHT, FOOL!',
-            'fight!',
-            500
+            '*whistle* . . . . . hey, shop-bird.',
+            '*squawk! gimme gold! *squaawk*',
+            1200
           )
         }
       ]
