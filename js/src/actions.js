@@ -2,15 +2,15 @@ let Actions = (function() {
   // genGame generates the 8 buttons from this array - ORDER MATTERS
   let btnArray = [
     // i 0, 1, 2, 3 are the left buttons
-    { name: 'think', perform: think },
+    { name: 'ponder', perform: think },
     { name: 'look', perform: look },
     { name: 'eat', perform: eat },
     { name: 'drink', perform: drink },
 
     // i 4, 5, 6, 7 are the right buttons
-    { name: 'use', perform: use },
     { name: 'equip', perform: showEquip },
-    { name: 'inv.', perform: inventory },
+    { name: 'gear', perform: gear },
+    { name: 'items', perform: inventory },
     { name: 'journal', perform: journal }
   ];
 
@@ -83,7 +83,7 @@ let Actions = (function() {
     document.querySelector('.inventory-container').classList.remove('hide');
   }
   
-  function use() {
+  function gear() {
     
   }
   
