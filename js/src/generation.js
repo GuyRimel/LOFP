@@ -5,11 +5,18 @@ let genGame = (function genGame() {
   
   function genNameContainer() {
     let container = document.querySelector('.name-container');
+    let islandName = document.createElement('div');
     let name = document.createElement('div');
-
-    name.innerText = Character.name;
-
+    
+    container.appendChild(islandName);
     container.appendChild(name);
+
+    islandName.innerText = Game.currentIslandName;
+    islandName.classList.add('islandName');
+    islandName.addEventListener('click', (e) => {
+      console.log(e.target);
+    });
+    name.innerText = Character.name;
   }
 
   function genLeftContainer() {
@@ -77,9 +84,8 @@ let genGame = (function genGame() {
   // the right container is toggled to show the equipment, journal, inventory
   function genUtilityContainer() {
     let container = document.querySelector('.utility-container');
-    let journalContainer = document.createElement('div');
+
     let inventoryContainer = document.createElement('div');
-    let equipmentContainer = document.createElement('div');
     
     (function genInventory() {
       for(i=0; i<20; i++){
@@ -102,37 +108,46 @@ let genGame = (function genGame() {
       }
     })();
     
+    let equipmentContainer = document.createElement('div');
+
     (function genEquip() {
       for(i=0; i<5; i++){
         let equipmentElement = document.createElement('div');
         let equipmentImg = document.createElement('img');
-        let equipmentLvl = document.createElement('span');
+        let lvlContainer = document.createElement('div');
+        let lvlPrefix = document.createElement('span');
+        let lvlNumber = document.createElement('span');
         let equipmentName = document.createElement('strong');
         let equipmentBar = document.createElement('div');
+
+        container.appendChild(equipmentContainer);
+        equipmentContainer.appendChild(equipmentElement);
+        equipmentElement.appendChild(equipmentImg);
+        equipmentElement.appendChild(equipmentName);
+        equipmentElement.appendChild(lvlContainer);
+        equipmentElement.appendChild(equipmentBar);
+        lvlContainer.appendChild(lvlPrefix);
+        lvlContainer.appendChild(lvlNumber);
   
+        equipmentContainer.classList.add('equipment-container', 'bar-container');
         equipmentElement.classList.add('equipItem', `equip${i}`);
         equipmentElement.addEventListener( 'click', (e) => {
           console.log(e.target);
         });
-        
         equipmentImg.src = `..\\..\\img\\inv.gif`;
-        equipmentName.innerText = 'equipment' + i;
-        equipmentLvl.innerText = i;
+        equipmentName.innerText = 'fishing-rod';
+        lvlPrefix.innerText = 'Level ';
+        lvlNumber.innerText = i;
         equipmentBar.classList.add('bar', `equip-bar${i}`);
-        equipmentElement.appendChild(equipmentImg);
-        equipmentElement.appendChild(equipmentName);
-        equipmentName.appendChild(equipmentLvl);
-        equipmentElement.appendChild(equipmentBar);
-        equipmentContainer.appendChild(equipmentElement);
-        container.appendChild(equipmentContainer);
-        equipmentContainer.classList.add('equipment-container', 'bar-container');
       }
     })();
     
+    let journalContainer = document.createElement('div');
+
     journalContainer.innerText = 'this is the journal', 'hide';
     journalContainer.classList.add('journal-container', 'hide');
     equipmentContainer.classList.add('equipment-container');
-
+    
     container.appendChild(journalContainer);
     container.appendChild(equipmentContainer);
   }

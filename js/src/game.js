@@ -1,4 +1,5 @@
 let Game = {
+  currentIslandName: "Albatross Isle",
   isConversing: false,
   weather: ["sunny", 'cloudy', 'rainy', 'snowy', 'monsoon'],
 
@@ -28,9 +29,10 @@ let Game = {
       document.querySelector(".view-container").style.backgroundColor = "darkblue";
       Game.converse(
         '*yyyyaaaawwn...',
-        'you are asleep...',
-        300
-      )
+        '. . .',
+        2500
+      );
+      setTimeout( () => Game.ask(1), 4000);
     },
     
     convertTime: function convertTime(time) {
