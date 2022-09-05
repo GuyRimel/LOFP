@@ -259,18 +259,18 @@
 @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
     .game-screen {
         grid-template-rows: 1.5em 2em 1fr 120px 120px 200px;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: 120px 1fr 1fr 1fr 1fr 120px;
     }
     
     .name-container {
         grid-row: 1;
-        grid-column: 1 / 5;
+        grid-column: 1 / 6;
         flex-direction: row;
     }
 
     .function-btn-container {
         grid-row: 1;
-        grid-column: 5 / 7;
+        grid-column: 6 / 7;
     }
     
     .header-container {
@@ -290,12 +290,12 @@
     
     .left-btn-container {
         grid-row: 5;
-        grid-column: 1 / 4;
+        grid-column: 1;
     }
     
     .right-btn-container {
         grid-row: 5;
-        grid-column: 4 / 7;
+        grid-column: 6;
     }
     
     .left-container {
