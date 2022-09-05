@@ -1,7 +1,24 @@
 
 // genGame is composed of generating each html container contents
-function genGame() {
+let genGame = (function genGame() {
   // the left container is for Stats
+  
+  function genNameContainer() {
+    let container = document.querySelector('.name-container');
+    let islandName = document.createElement('div');
+    let name = document.createElement('div');
+    
+    container.appendChild(islandName);
+    container.appendChild(name);
+
+    islandName.innerText = Game.currentIslandName;
+    islandName.classList.add('islandName');
+    islandName.addEventListener('click', (e) => {
+      console.log(e.target);
+    });
+    name.innerText = Character.name;
+  }
+
   function genLeftContainer() {
     let leftContainer = document.querySelector('.left-container');
     let statsList = Object.keys(Character.stats);
@@ -64,23 +81,75 @@ function genGame() {
     container.appendChild(infoBtn);
   }
 
-  // the right container is toggled to show the tools, journal, inventory
-  function genRightContainer() {
-    let container = document.querySelector('.right-container');
-    let journalContainer = document.createElement('div');
+  // the right container is toggled to show the equipment, journal, inventory
+  function genUtilityContainer() {
+    let container = document.querySelector('.utility-container');
+
     let inventoryContainer = document.createElement('div');
-    let toolsContainer = document.createElement('div');
+    
+    (function genInventory() {
+      for(i=0; i<20; i++){
+        let inventoryElement = document.createElement('div');
+        let inventoryImg = document.createElement('img');
+        let inventoryAmt = document.createElement('span');
+  
+        inventoryElement.classList.add('invItem', `inv${i}`);
+        inventoryElement.addEventListener( 'click', (e) => {
+          console.log(e.target);
+        });
+  
+        inventoryImg.src = `..\\..\\img\\inv.gif`;
+        inventoryAmt.innerText = i;
+        inventoryElement.appendChild(inventoryImg);
+        inventoryElement.appendChild(inventoryAmt);
+        inventoryContainer.appendChild(inventoryElement);
+        container.appendChild(inventoryContainer);
+        inventoryContainer.classList.add('inventory-container', 'hide');
+      }
+    })();
+    
+    let equipmentContainer = document.createElement('div');
 
-    journalContainer.classList.add('journal-container');
-    journalContainer.innerText = 'this is the journal';
-    inventoryContainer.classList.add('inventory-container', 'hide');
-    inventoryContainer.innerText = 'this is the inventory';
-    toolsContainer.classList.add('tools-container', 'hide');
-    toolsContainer.innerText = 'this is the tools container';
+    (function genEquip() {
+      for(i=0; i<5; i++){
+        let equipmentElement = document.createElement('div');
+        let equipmentImg = document.createElement('img');
+        let lvlContainer = document.createElement('div');
+        let lvlPrefix = document.createElement('span');
+        let lvlNumber = document.createElement('span');
+        let equipmentName = document.createElement('strong');
+        let equipmentBar = document.createElement('div');
 
+        container.appendChild(equipmentContainer);
+        equipmentContainer.appendChild(equipmentElement);
+        equipmentElement.appendChild(equipmentImg);
+        equipmentElement.appendChild(equipmentName);
+        equipmentElement.appendChild(lvlContainer);
+        equipmentElement.appendChild(equipmentBar);
+        lvlContainer.appendChild(lvlPrefix);
+        lvlContainer.appendChild(lvlNumber);
+  
+        equipmentContainer.classList.add('equipment-container', 'bar-container');
+        equipmentElement.classList.add('equipItem', `equip${i}`);
+        equipmentElement.addEventListener( 'click', (e) => {
+          console.log(e.target);
+        });
+        equipmentImg.src = `..\\..\\img\\inv.gif`;
+        equipmentName.innerText = 'fishing-rod';
+        lvlPrefix.innerText = 'Level ';
+        lvlNumber.innerText = i;
+        equipmentBar.classList.add('bar', `equip-bar${i}`);
+      }
+    })();
+    
+    let journalContainer = document.createElement('div');
+
+    journalContainer.innerText = 'this is the journal', 'hide';
+    journalContainer.classList.add('journal-container', 'hide');
+    equipmentContainer.classList.add('equipment-container');
+    
     container.appendChild(journalContainer);
-    container.appendChild(inventoryContainer);
-    container.appendChild(toolsContainer);
+    container.appendChild(equipmentContainer);
   }
 
   // left btn container is usually "eat" "nap" "think" "rage"
@@ -90,7 +159,7 @@ function genGame() {
     let rightBtnContainer = document.querySelector('.right-btn-container');
     let container = leftBtnContainer;
 
-    function genBtns(container) {
+    function genBtns(container, i) {
       let button = document.createElement('button');
       let buttonName = Actions.btnArray[i].name;
       // buttonAction is set to a string from the current index of Actions.btnArray
@@ -98,16 +167,25 @@ function genGame() {
 
       button.innerText = buttonName;
       button.classList.add('gamepad-btn');
-      button.id = `btn${i+1}`;
+      button.id = `btn${i}`;
       // now, the buttonAction string becomes the name of a function in the button's eventListener
-      button.addEventListener('click', (event) => buttonAction() );
+      // note: #btn4, 5, 6, & 7 remain "selected" once clicked
+      button.addEventListener('click', (e) => { 
+        buttonAction();
+        if(container !== leftBtnContainer) {
+          for(i=4; i<8; i++){
+            document.querySelector(`#btn${i}`).classList.remove('selected');
+          }
+          e.target.classList.add('selected');
+        }
+      });
       container.appendChild(button);
     }
 
     // the left 
     for(i = 0; i < 8; i++) {
       if(i > 3) { container = rightBtnContainer }
-      genBtns(container);
+      genBtns(container, i);
     }
   }
 
@@ -142,17 +220,17 @@ function genGame() {
   function genViewContainer() {
 
   }
-
-  genLeftContainer();
+  
+  genNameContainer();
   genHeaderContainer();
+  genLeftContainer();
   genFunctionBtnContainer();
-  genRightContainer();
+  genUtilityContainer();
   genBtnContainers();
   genDialogContainer();
   genViewContainer();
   Game.time.dayStart();
-}
+})();
 
-genGame();
 Character.update();
 Game.update();

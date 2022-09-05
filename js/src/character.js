@@ -1,7 +1,6 @@
 
 let Character = {
   name: "Francis",
-  level: 1,
   xpTilLevelup: 1000,
   isDead: false,
   isAsleep: false,
@@ -10,16 +9,18 @@ let Character = {
   snoozes: 0,
   snoozeDuration: 30,
   
-    stats: {
-      xp: 0,
-      health: 10,
-      stamina: 10,
-      skill: 10,
-      power: 10,
-      luck: 10
-    },
-
-    statMaximums: {
+  stats: {
+    level: 1,
+    xp: 0,
+    health: 10,
+    stamina: 10,
+    skill: 10,
+    power: 10,
+    luck: 10
+  },
+  
+  statMaximums: {
+      levelMax: 20,
       xpMax: 10,
       healthMax: 10,
       staminaMax: 10,
@@ -59,8 +60,7 @@ let Character = {
       let statMax = Character.statMaximums[`${stat}Max`];
       let statBar = document.querySelector(`.${stat}-bar`);
       let statSpan = statBar.previousElementSibling;
-      let percentFull = statValue / statMax * 100;
-
+      
       if(statValue > statMax) {
         Character.stats[stat] = statMax;
         statValue = statMax;
@@ -69,7 +69,8 @@ let Character = {
         Character.stats[stat] = 0;
         statValue = 0
       }
-
+      
+      let percentFull = statValue / statMax * 100;
       statSpan.innerText = statValue;
       statBar.style.width = `${percentFull}%`;
     });
