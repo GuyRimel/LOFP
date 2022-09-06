@@ -324,6 +324,10 @@
         width: 160vh;
     }
     
+    .inventory-container {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    
     .equipment-container {
         grid-template-columns: 1fr 1fr;
     }
