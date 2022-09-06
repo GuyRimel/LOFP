@@ -1,48 +1,20 @@
 
 // genGame is composed of generating each html container contents
 let genGame = (function genGame() {
-  // the left container is for Stats
   
   function genNameContainer() {
     let container = document.querySelector('.name-container');
     let islandName = document.createElement('div');
-    let name = document.createElement('div');
     
     container.appendChild(islandName);
-    container.appendChild(name);
 
     islandName.innerText = Game.currentIslandName;
     islandName.classList.add('islandName');
     islandName.addEventListener('click', (e) => {
       console.log(e.target);
     });
-    name.innerText = Character.name;
   }
-
-  function genLeftContainer() {
-    let leftContainer = document.querySelector('.left-container');
-    let statsList = Object.keys(Character.stats);
-    
-    for (i = 0; i < statsList.length; i++) {
-      let statContainer = document.createElement('div');
-      let statBarElement = document.createElement('div');
-      let statNameElement = document.createElement('strong');
-      let statValueElement = document.createElement('span');
-      let statName = statsList[i];
-
-      statNameElement.innerText = statName;
-      statValueElement.innerText = Character.stats[statName];
-      statContainer.classList.add('bar-container');
-      statBarElement.classList.add('bar');
-      statBarElement.classList.add(`${statName}-bar`);
-
-      statContainer.appendChild(statNameElement);
-      statContainer.appendChild(statValueElement);
-      statContainer.appendChild(statBarElement);
-      leftContainer.appendChild(statContainer);
-    }
-  }
-
+  
   // the header container is for time display
   function genHeaderContainer() {
     let container = document.querySelector('.header-container');
@@ -84,7 +56,15 @@ let genGame = (function genGame() {
   // the right container is toggled to show the equipment, journal, inventory
   function genUtilityContainer() {
     let container = document.querySelector('.utility-container');
+    let containerCloseBtn = document.createElement('div');
 
+    container.appendChild(containerCloseBtn);
+    
+    containerCloseBtn.classList.add('utility-close-btn');
+    containerCloseBtn.innerText = 'Close';
+    containerCloseBtn.addEventListener('click', () => Actions.closeUtility());
+    
+    
     let inventoryContainer = document.createElement('div');
     
     (function genInventory() {
@@ -143,19 +123,58 @@ let genGame = (function genGame() {
     })();
     
     let journalContainer = document.createElement('div');
-
+    
     journalContainer.innerText = 'this is the journal', 'hide';
     journalContainer.classList.add('journal-container', 'hide');
     equipmentContainer.classList.add('equipment-container');
     
     container.appendChild(journalContainer);
     container.appendChild(equipmentContainer);
+    
+    (function genstatsContainers() {
+      let
+      statsContainer = document.createElement('div'),
+      statsList = Object.keys(Character.stats),
+      statsSpread = document.querySelector('.stats-spread'),
+      spreadList = [ 'health', 'stamina', 'xp' ];
+      
+      for (i = 0; i < statsList.length; i++) {
+        let
+          statContainer = document.createElement('div'),
+          statBarElement = document.createElement('div'),
+          statNameElement = document.createElement('strong'),
+          statValueElement = document.createElement('span');
+          statName = statsList[i];
+        
+        statContainer.appendChild(statNameElement);
+        statContainer.appendChild(statValueElement);
+        statContainer.appendChild(statBarElement);
+        statsContainer.appendChild(statContainer);
+        
+        statContainer.classList.add('bar-container');
+        statBarElement.classList.add(`${statName}-bar`, 'bar');
+
+        statNameElement.innerText = statName;
+        statValueElement.innerText = Character.stats[statName];
+      }
+  
+      for(i = 0; i < spreadList.length; i++) {
+        let spread = document.createElement('div');
+        statsSpread.appendChild(spread);
+        spread.classList.add(`${spreadList[i]}-bar`, 'bar');
+      }
+
+      container.appendChild(statsContainer);
+
+      statsContainer.classList.add('stats-container');
+    })();
   }
 
   // left btn container is usually "eat" "nap" "think" "rage"
   // right btn container is "tool", "inv", "look", "journal"
   function genBtnContainers() {
     let leftBtnContainer = document.querySelector('.left-btn-container');
+    let middleBtnContainer = document.querySelector('.middle-btn-container');
     let rightBtnContainer = document.querySelector('.right-btn-container');
     let container = leftBtnContainer;
 
@@ -169,22 +188,16 @@ let genGame = (function genGame() {
       button.classList.add('gamepad-btn');
       button.id = `btn${i}`;
       // now, the buttonAction string becomes the name of a function in the button's eventListener
-      // note: #btn4, 5, 6, & 7 remain "selected" once clicked
       button.addEventListener('click', (e) => { 
         buttonAction();
-        if(container !== leftBtnContainer) {
-          for(i=4; i<8; i++){
-            document.querySelector(`#btn${i}`).classList.remove('selected');
-          }
-          e.target.classList.add('selected');
-        }
       });
+
       container.appendChild(button);
     }
 
-    // the left 
-    for(i = 0; i < 8; i++) {
+    for(i = 0; i < 10; i++) {
       if(i > 3) { container = rightBtnContainer }
+      if(i > 7) { container = middleBtnContainer }
       genBtns(container, i);
     }
   }
@@ -195,11 +208,10 @@ let genGame = (function genGame() {
     let charImg = document.createElement('img');
     
     container.appendChild(charImg);
+
     charImg.classList.add('character-img');
     charImg.setAttribute('src', '..\\..\\img\\char.gif');
-    charImg.addEventListener( 'click', (e) => {
-      console.log(e.target);
-    });
+    charImg.addEventListener( 'click', () => Actions.showStats());
   }
 
   // also displays interactive feedback 
@@ -223,7 +235,7 @@ let genGame = (function genGame() {
     choicesContainer.classList.add('choices');
     for(i=0; i<3; i++) {
       let choiceElement = document.createElement('span');
-      choiceElement.classList.add('choice');
+      choiceElement.classList.add('choice', 'hide');
       choiceElement.setAttribute("data-choice-number", i);
       choiceElement.addEventListener( 'click', (e) => {
         let choiceNumber = e.target.getAttribute("data-choice-number");
@@ -235,7 +247,6 @@ let genGame = (function genGame() {
   
   genNameContainer();
   genHeaderContainer();
-  genLeftContainer();
   genFunctionBtnContainer();
   genUtilityContainer();
   genBtnContainers();

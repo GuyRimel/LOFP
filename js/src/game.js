@@ -94,11 +94,16 @@ let Game = {
 
     let choicesElement = document.querySelector('.choices');
     let choices = document.querySelectorAll('.choice');
-    setTimeout(() => choicesElement.classList.remove('hide'), 500);
 
     choices.forEach((choice, i) => {
       choice.innerText = questionObj.choices[i];
+      choice.classList.remove('hide');
+      if(!choice) { choice.classList.add('hide'); }
     });
+
+    setTimeout(() => {
+      choicesElement.classList.remove('hide');
+    }, 500);
   },
 
   shush: (query) => {
