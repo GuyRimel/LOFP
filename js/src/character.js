@@ -53,12 +53,15 @@ let Character = {
 
   // this is meant to take corresponding ARRAYS
   changeStats: (stats, amounts) => {
+    let statSpreadList = [ 'health', 'stamina', 'xp']
     stats.forEach( (stat, amount) => {
       Character.stats[stat] += amounts[amount];
 
       let statValue = Character.stats[stat];
       let statMax = Character.statMaximums[`${stat}Max`];
       let statBar = document.querySelector(`.${stat}-bar`);
+      let statSpread;
+      
       let statSpan = statBar.previousElementSibling;
       
       if(statValue > statMax) {
@@ -73,12 +76,17 @@ let Character = {
       let percentFull = statValue / statMax * 100;
       statSpan.innerText = statValue;
       statBar.style.width = `${percentFull}%`;
-    });
+      
+      if(statSpreadList.includes(stat)) {
+        statSpread = document.querySelector(`.stats-spread .${stat}-bar`);
+        statSpread.style.width = `${percentFull}%`;
+      }
     
     (Character.stats.health <= 0) ?
       Character.isDead = true : Character.isDead = false;
     (Character.stats.stamina <= 0) ?
       Character.isExhausted = true : Character.isExhausted = false;
+    })
   },
   
   changeStat: (stat, amount) => {

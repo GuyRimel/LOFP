@@ -11,7 +11,10 @@ let Actions = (function() {
     { name: 'equip', perform: showEquip },
     { name: 'gear', perform: gear },
     { name: 'items', perform: inventory },
-    { name: 'journal', perform: journal }
+    { name: 'journal', perform: journal },
+
+    { name: 'SP', perform: skillMove },
+    { name: 'ATK', perform: attackMove }
   ];
 
   // with these actions order matters
@@ -72,15 +75,19 @@ let Actions = (function() {
   }
   
   function showEquip() {
+    document.querySelector('.utility-container').classList.remove('hide');
+    document.querySelector('.equipment-container').classList.remove('hide');
     document.querySelector('.journal-container').classList.add('hide');
     document.querySelector('.inventory-container').classList.add('hide');
-    document.querySelector('.equipment-container').classList.remove('hide');
+    document.querySelector('.stats-container').classList.add('hide');
   }
   
   function inventory() {
-    document.querySelector('.journal-container').classList.add('hide');
-    document.querySelector('.equipment-container').classList.add('hide');
+    document.querySelector('.utility-container').classList.remove('hide');
     document.querySelector('.inventory-container').classList.remove('hide');
+    document.querySelector('.equipment-container').classList.add('hide');
+    document.querySelector('.journal-container').classList.add('hide');
+    document.querySelector('.stats-container').classList.add('hide');
   }
   
   function gear() {
@@ -88,9 +95,31 @@ let Actions = (function() {
   }
   
   function journal() {
-    document.querySelector('.inventory-container').classList.add('hide');
-    document.querySelector('.equipment-container').classList.add('hide');
+    document.querySelector('.utility-container').classList.remove('hide');
     document.querySelector('.journal-container').classList.remove('hide');
+    document.querySelector('.equipment-container').classList.add('hide');
+    document.querySelector('.inventory-container').classList.add('hide');
+    document.querySelector('.stats-container').classList.add('hide');
+  }
+
+  function showStats() {
+    document.querySelector('.utility-container').classList.remove('hide');
+    document.querySelector('.stats-container').classList.remove('hide');
+    document.querySelector('.equipment-container').classList.add('hide');
+    document.querySelector('.journal-container').classList.add('hide');
+    document.querySelector('.inventory-container').classList.add('hide');
+  }
+
+  function closeUtility() {
+    document.querySelector('.utility-container').classList.add('hide');
+  }
+
+  function skillMove() {
+    console.log('skillMove')
+  }
+
+  function attackMove() {
+    console.log('attackMove')
   }
 
   function wake() {
@@ -132,7 +161,9 @@ let Actions = (function() {
     btnArray: btnArray,
     wake: wake,
     snooze: snooze,
-    dream: dream
+    dream: dream,
+    showStats: showStats,
+    closeUtility: closeUtility
   }
 
 })();
