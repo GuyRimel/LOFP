@@ -190,19 +190,37 @@ let genGame = (function genGame() {
   }
 
   // also displays interactive feedback 
+  function genCharacterContainer() {
+    let container = document.querySelector('.character-container')
+    let charImg = document.createElement('img');
+    
+    container.appendChild(charImg);
+    charImg.classList.add('character-img');
+    charImg.setAttribute('src', '..\\..\\img\\char.gif');
+    charImg.addEventListener( 'click', (e) => {
+      console.log(e.target);
+    });
+  }
+
+  // also displays interactive feedback 
   function genDialogContainer() {
     let container = document.querySelector('.dialog-container')
     let feedback = document.createElement('div');
     let dialog = document.createElement('div');
-    let choicesContainer = document.createElement('div');
     
     feedback.classList.add('feedback');
     dialog.classList.add('dialog');
-    choicesContainer.classList.add('choices');
     container.appendChild(feedback);
     container.appendChild(dialog);
+  }
+
+  /* the view container is the big middle screen, here is where things will appear after an action is performed.
+  for example, after performing "fish" a fish image would pop up and the dialog would describe the result of the fish action */
+  function genViewContainer() {
+    let container = document.querySelector('.view-container');
+    let choicesContainer = document.createElement('div');
     container.appendChild(choicesContainer);
-    
+    choicesContainer.classList.add('choices');
     for(i=0; i<3; i++) {
       let choiceElement = document.createElement('span');
       choiceElement.classList.add('choice');
@@ -214,12 +232,6 @@ let genGame = (function genGame() {
       choicesContainer.appendChild(choiceElement);
     }
   }
-
-  /* the view container is the big middle screen, here is where things will appear after an action is performed.
-  for example, after performing "fish" a fish image would pop up and the dialog would describe the result of the fish action */
-  function genViewContainer() {
-
-  }
   
   genNameContainer();
   genHeaderContainer();
@@ -227,6 +239,7 @@ let genGame = (function genGame() {
   genFunctionBtnContainer();
   genUtilityContainer();
   genBtnContainers();
+  genCharacterContainer();
   genDialogContainer();
   genViewContainer();
   Game.time.dayStart();
