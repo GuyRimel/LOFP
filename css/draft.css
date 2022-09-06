@@ -10,7 +10,7 @@
 }
 
 .game-screen {
-    grid-template-columns: 120px 1fr 120px;
+    grid-template-columns: 120px 120px 1fr 120px;
     grid-template-rows: 2em 1.5em calc(100vh - 2em - 1.5em - 120px) 120px;
 }
 
@@ -30,13 +30,8 @@
     align-items: center;
 }
 
-.left-container {
-    grid-row: 3 / 4;
-    background-color: #efefef;
-    overflow: auto;
-}
-
 .header-container {
+    grid-column: 2 / 4;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,90 +44,82 @@
     align-items: center;
 }
 
+.left-container {
+    grid-row: 3 / 4;
+    background-color: #efefef;
+    overflow: auto;
+}
+
+.view-container {
+    background-color: cadetblue;
+    grid-row: 2 / 4;
+    grid-column: 2 / 4;
+    display: grid;
+    grid-template-rows: 1fr 2em;
+}
+
 .left-btn-container, .right-btn-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
-.view-container {
-    grid-row: 2 / 4;
-    background-color: cadetblue;
+.choices {
+    display: flex;
+    grid-row: 2;
+    justify-content: space-evenly;
 }
 
-.utility-container {
-    grid-row: 2 / 4;
+.choice {
+    background-color: darkblue;
+    color: lightgray;
+    padding: 3px 10px 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.utility-container { grid-row: 2 / 4; }
+
+.character-container {
+    width: 120px;
+}
+
+.character-img {
+    width: 120px;
 }
 
 .dialog-container {
     background-image: linear-gradient(#222, #111, #222);
+    grid-column: 3;
     display: flex;
     flex-flow: column;
     justify-content: space-evenly;
     align-items: center;
 }
 
-.feedback, .dialog, .choices {
+.feedback, .dialog {
     text-align: center;
     inline-size: 100%;
     overflow-wrap: break-word;
     padding: 5px;
 }
 
-.feedback {
-    color: lightgray;
-}
-
-.dialog {
-    color: cyan;
-}
-
-.choices {
-    color: lightgray;
-    /* display: flex;
-    flex-flow: row wrap;
-    justify-content: space-evenly */
-}
-
-.gamepad-btn {
-    border-radius: 5px;
-}
-
-.bar-container {
-    margin-bottom: 5px;
-}
+.feedback { color: lightgray; }
+.dialog { color: cyan; }
+.gamepad-btn { border-radius: 5px; }
+.bar-container { margin-bottom: 5px; }
 
 .bar {
     height: 5px;
     border: 1px inset gray;
 }
 
-.level-bar {
-    background-color: darkcyan;
-}
-
-.xp-bar {
-    background-color: cyan;
-}
-
-.health-bar {
-    background-color: red;
-}
-
-.stamina-bar {
-    background-color: lime;
-}
-
-.skill-bar {
-    background-color: orange;
-}
-
-.power-bar {
-    background-color: purple;
-}
-
-.luck-bar {
-    background-color: gold;
-}
+.level-bar { background-color: darkcyan; }
+.xp-bar { background-color: cyan; }
+.health-bar { background-color: red; }
+.stamina-bar { background-color: lime; }
+.skill-bar { background-color: orange; }
+.power-bar { background-color: purple; }
+.luck-bar { background-color: gold; }
 
 .weather-time-date {
     width: 100%;
@@ -140,13 +127,8 @@
     justify-content: space-between;
 }
 
-.weather-time-date span {
-    text-align: center;
-}
-
-.weather, .date {
-    width: 33%;
-}
+.weather-time-date span { text-align: center; }
+.weather, .date { width: 33%; }
 
 .time-bar {
     background-color: lightskyblue;
@@ -160,9 +142,6 @@
     padding-right: auto;
 }
 
-.choice {
-    padding: 0 15px;
-}
 
 .modal-screen {
     background-color: rgba(0, 0, 0, .5);
@@ -187,13 +166,8 @@
     overflow: auto;
 }
 
-.inventory-container {
-    grid-template-columns: 1fr 1fr;
-}
-
-.equipment-container {
-    grid-template-columns: 1fr;
-}
+.inventory-container { grid-template-columns: 1fr 1fr; }
+.equipment-container { grid-template-columns: 1fr; }
 
 .invItem, .equipItem {
     position: relative;
@@ -286,9 +260,14 @@
         grid-column: 1 / 7;
     }
     
+    .character-container {
+        grid-row: 4;
+        grid-column: 1 / 2;
+    }
+    
     .dialog-container {
         grid-row: 4;
-        grid-column: 1 / 7;
+        grid-column: 2 / 7;
     }
     
     .left-btn-container {
