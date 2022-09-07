@@ -1,11 +1,11 @@
 let Game = {
   currentIslandName: "Albatross Isle",
   isConversing: false,
-  weather: ["sunny", 'cloudy', 'rainy', 'snowy', 'monsoon'],
+  weather: ["Sunny", 'Cloudy', 'Rainy', 'Snowy', 'Monsoon'],
 
   time: {
-    seasonsList: ["spring", "summer", "fall", "winter"],
-    season: "spring",
+    seasonsList: [ "Spring", "Summer", "Fall", "Winter" ],
+    season: 0,
     day: 0,
     daysPerSeason: 10,
     year: 1660,
@@ -19,6 +19,15 @@ let Game = {
       let weather = document.querySelector(".weather");
       weather.innerText = Game.weather[Math.floor(Math.random() * 5)];
       Game.time.day++;
+      if(Game.time.day > 10) {
+        Game.time.day = 1;
+        Game.time.season++;
+        if(Game.time.season > 3) {
+          Game.time.season = 0;
+          Game.time.year++;
+        }
+      }
+
       Game.time.minute = 0;
       Game.time.setDate();
       Game.time.changeTime(0);
@@ -51,6 +60,7 @@ let Game = {
     setDate: function setDate() {
       let date = document.querySelector(".date");
       let season = Game.time.season;
+      season = Game.time.seasonsList[season];
       let day = Game.time.day;
       let year = Game.time.year;
       date.innerText = `${season} ${day}, ${year}`;
