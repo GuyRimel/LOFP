@@ -2,10 +2,10 @@ let Actions = (function() {
   // genGame generates the 8 buttons from this array - ORDER MATTERS
   let btnArray = [
     // i 0, 1, 2, 3 are the left buttons
-    { name: 'ponder', perform: think },
-    { name: 'look', perform: look },
     { name: 'eat', perform: eat },
+    { name: 'explore', perform: explore },
     { name: 'drink', perform: drink },
+    { name: 'look', perform: look },
 
     // i 4, 5, 6, 7 are the right buttons
     { name: 'equip', perform: showEquip },
@@ -50,7 +50,7 @@ let Actions = (function() {
     );
   }
   
-  function think() {
+  function explore() {
     Character.checkup();
     if(Game.isConversing || !Character.isAble()) { return }
     
