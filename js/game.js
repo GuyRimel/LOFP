@@ -2,9 +2,10 @@ let Game = {
   currentIslandName: "Albatross Isle",
   isConversing: false,
   weather: ["Sunny", 'Cloudy', 'Rainy', 'Snowy', 'Monsoon'],
+  maxGroundHeight: 65,
   chanceOfWater: .50,
   maxWaterWidth: 40,
-  maxTrees: 5,
+  maxTrees: 6,
 
   time: {
     seasonsList: [ "Spring", "Summer", "Fall", "Winter" ],
@@ -214,7 +215,7 @@ let Game = {
       
 
     while(groundHeight < 40) {
-      groundHeight = Game.getRandomInt(65);
+      groundHeight = Game.getRandomInt(Game.maxGroundHeight);
     }
 
     oldGens.forEach( (el) => el.remove() );
@@ -224,6 +225,7 @@ let Game = {
 
         viewContainer.appendChild(ground);
         ground.classList.add('ground');
+        ground.style.height = groundHeight + '%';
     })();
 
     (function genWater() {
@@ -233,6 +235,7 @@ let Game = {
       viewContainer.appendChild(water);
       water.classList.add('water');
       water.style.width = waterWidth + '%';
+      water.style.height = groundHeight + '%';
       water.addEventListener ('click', (e) => console.log(e.target));
       console.log(isWater, waterWidth);
     })();
@@ -241,8 +244,8 @@ let Game = {
       for(i=0; i < treesInArea; i++) {
         let
           tree = document.createElement('img'),
-          treeBottomNumber = Math.random() * 65,
-          treeLeftNumber = Math.random() * 100;
+          treeBottomNumber = Game.getRandomInt(groundHeight),
+          treeLeftNumber = Game.getRandomInt(100);
   
           if(isWater && treeLeftNumber < 25 ) { treeLeftNumber += waterWidth; }
           if(treeLeftNumber > 95 ) { treeLeftNumber = 95; }
