@@ -407,7 +407,6 @@
 .view-container svg.water{
     position: absolute;
     bottom: 0;
-    width: 25%;
     height: 65%;
     background-image: linear-gradient(darkcyan, #003e3e);
     /* z-index: 2; */

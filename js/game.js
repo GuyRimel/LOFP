@@ -3,6 +3,8 @@ let Game = {
   isConversing: false,
   weather: ["Sunny", 'Cloudy', 'Rainy', 'Snowy', 'Monsoon'],
   chanceOfWater: .50,
+  maxWaterWidth: 40,
+  maxTrees: 5,
 
   time: {
     seasonsList: [ "Spring", "Summer", "Fall", "Winter" ],
@@ -202,59 +204,67 @@ let Game = {
   ],
 
   generateExplorationArea() {
-
     let
       viewContainer = document.querySelector('.view-container'),
+      groundHeight = 0,
       isWater = Game.maybeTrue(Game.chanceOfWater),
-      oldGens = document.querySelectorAll(
-        '.view-container svg, .view-container img'
-      );
+      waterWidth = Game.getRandomInt(Game.maxWaterWidth),
+      treesInArea = Game.getRandomInt(Game.maxTrees),
+      oldGens = document.querySelectorAll('.view-container svg, .view-container img');
+      
 
-    console.log(isWater);
+    while(groundHeight < 40) {
+      groundHeight = Game.getRandomInt(65);
+    }
+
     oldGens.forEach( (el) => el.remove() );
 
-    function genGround() {
+    (function genGround() {
       let ground = document.createElement('svg');
 
         viewContainer.appendChild(ground);
         ground.classList.add('ground');
-    }
+    })();
 
-    function genWater() {
+    (function genWater() {
+      if(!isWater) { return }
       let water = document.createElement('svg');
-        viewContainer.appendChild(water);
-        water.classList.add('water');
-        water.addEventListener ('click', (e) => console.log(e.target));
-    }
 
-    function genTrees() {
-      let
-        tree = document.createElement('img'),
-        treeBottomNumber = Math.random() * 65,
-        treeLeftNumber = Math.random() * 100;
+      viewContainer.appendChild(water);
+      water.classList.add('water');
+      water.style.width = waterWidth + '%';
+      water.addEventListener ('click', (e) => console.log(e.target));
+      console.log(isWater, waterWidth);
+    })();
 
-        if(isWater && treeLeftNumber < 25 ) { treeLeftNumber += 25; }
-        if(treeLeftNumber > 95 ) { treeLeftNumber = 95; }
-
-        viewContainer.appendChild(tree);
-        tree.classList.add('tree');
-        tree.src = './../../img/tree01.gif';
-        tree.style.bottom = treeBottomNumber + '%';
-        tree.style.left = treeLeftNumber + '%';
-        tree.addEventListener ('click', (e) => console.log(e.target));
-    }
-
-    genGround();
-    genWater();
-    for(i=0; i < (Math.random() * 5); i++) {
-      genTrees();
-    }
+    (function genTrees() {
+      for(i=0; i < treesInArea; i++) {
+        let
+          tree = document.createElement('img'),
+          treeBottomNumber = Math.random() * 65,
+          treeLeftNumber = Math.random() * 100;
+  
+          if(isWater && treeLeftNumber < 25 ) { treeLeftNumber += waterWidth; }
+          if(treeLeftNumber > 95 ) { treeLeftNumber = 95; }
+          
+          viewContainer.appendChild(tree);
+          tree.classList.add('tree');
+          tree.src = '../img/tree01.gif';
+          tree.style.bottom = treeBottomNumber + '%';
+          tree.style.left = treeLeftNumber + '%';
+          tree.addEventListener ('click', (e) => console.log(e.target));
+      }
+    })();
   },
 
   // takes a decimal from 0 to 1 probability of true. returns boolean
   maybeTrue(probability) {
     if(Math.random() <= probability) { return true }
     else { return false }
+  },
+
+  getRandomInt(max) {
+    return Math.floor(Math.random() * max);
   },
 
   update: () => {

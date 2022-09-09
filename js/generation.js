@@ -78,7 +78,7 @@ let genGame = (function genGame() {
           console.log(e.target);
         });
   
-        inventoryImg.src = `..\\..\\img\\inv.gif`;
+        inventoryImg.src = `../img/inv.gif`;
         inventoryAmt.innerText = i;
         inventoryElement.appendChild(inventoryImg);
         inventoryElement.appendChild(inventoryAmt);
@@ -114,7 +114,7 @@ let genGame = (function genGame() {
         equipmentElement.addEventListener( 'click', (e) => {
           console.log(e.target);
         });
-        equipmentImg.src = `..\\..\\img\\inv.gif`;
+        equipmentImg.src = `../img/inv.gif`;
         equipmentName.innerText = 'fishing-rod';
         lvlPrefix.innerText = 'Level ';
         lvlNumber.innerText = i;
@@ -210,7 +210,7 @@ let genGame = (function genGame() {
     container.appendChild(charImg);
 
     charImg.classList.add('character-img');
-    charImg.setAttribute('src', '..\\..\\img\\char.gif');
+    charImg.setAttribute('src', '../img/char.gif');
     charImg.addEventListener( 'click', () => Actions.showStats());
   }
 
