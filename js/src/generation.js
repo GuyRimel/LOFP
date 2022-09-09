@@ -229,8 +229,10 @@ let genGame = (function genGame() {
   /* the view container is the big middle screen, here is where things will appear after an action is performed.
   for example, after performing "fish" a fish image would pop up and the dialog would describe the result of the fish action */
   function genViewContainer() {
-    let container = document.querySelector('.view-container');
-    let choicesContainer = document.createElement('div');
+    let
+      container = document.querySelector('.view-container'),
+      choicesContainer = document.createElement('div');
+
     container.appendChild(choicesContainer);
     choicesContainer.classList.add('choices');
     for(i=0; i<3; i++) {

@@ -5,7 +5,7 @@ let Actions = (function() {
     { name: 'eat', perform: eat },
     { name: 'explore', perform: explore },
     { name: 'drink', perform: drink },
-    { name: 'look', perform: look },
+    { name: 'home', perform: home },
 
     // i 4, 5, 6, 7 are the right buttons
     { name: 'equip', perform: showEquip },
@@ -58,20 +58,20 @@ let Actions = (function() {
     let amounts = [-2, 2, -2];
     Character.changeStats(stats, amounts);
     
-    Game.time.changeTime(500);
+    Game.time.changeTime(45);
     if(Character.isAsleep) { return }
 
     Game.converse(
-      'hmm... carry the three... then, express the derivative, and carry the seven...',
-      'you are thinking...',
-      1500
-      );
+      'let\'s GOOO!!!',
+      'off you go exploring...',
+      300
+    );
+
+    Game.generateExplorationArea();
   }
   
-  function look() {
+  function home() {
     Character.checkup();
-    if(Game.isConversing || !Character.isAble()) { return }
-    Game.ask(0);
   }
   
   function showEquip() {
@@ -91,7 +91,6 @@ let Actions = (function() {
   }
   
   function gear() {
-    
   }
   
   function journal() {

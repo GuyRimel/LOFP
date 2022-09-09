@@ -200,6 +200,64 @@ let Game = {
     }
   ],
 
+  generateExplorationArea() {
+
+    let
+      viewContainer = document.querySelector('.view-container'),
+      isWater = true,
+      oldGens = document.querySelectorAll(
+        '.view-container svg, .view-container img'
+      );
+
+    console.log(oldGens);
+    oldGens.forEach( (el) => el.remove() );
+
+    function genGround() {
+      let ground = document.createElement('svg');
+
+        viewContainer.appendChild(ground);
+        ground.classList.add('ground');
+    }
+
+    function genWater() {
+      let water = document.createElement('svg');
+
+        viewContainer.appendChild(water);
+        water.classList.add('water');
+        water.addEventListener ('click', (e) => console.log(e.target));
+    }
+
+    function genTrees() {
+      let
+        tree = document.createElement('img'),
+        treeBottomNumber = Game.getRandomInt(65),
+        treeLeftNumber = Game.getRandomInt();
+
+        if(isWater && treeLeftNumber < 25 ) { treeLeftNumber += 25; }
+        if(treeLeftNumber > 95 ) { treeLeftNumber = 95; }
+
+        viewContainer.appendChild(tree);
+        tree.classList.add('tree');
+        tree.src = '../../img/tree01.gif';
+        tree.style.bottom = treeBottomNumber + '%';
+        tree.style.left = treeLeftNumber + '%';
+        tree.addEventListener ('click', (e) => console.log(e.target));
+    }
+
+    genGround();
+    genWater();
+    let max = Game.getRandomInt(5);
+    console.log(max);
+    for(i=0; i < max; i++) {
+      genTrees();
+    }
+  },
+
+  getRandomInt(max) {
+    if(!max) { max = 100 }
+    return Math.floor(Math.random() * max);
+  },
+
   update: () => {
     Game.time.changeTime(0);
   }

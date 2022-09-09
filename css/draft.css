@@ -59,8 +59,10 @@
     grid-row: 3;
     grid-column: 1 / 7;
     background-color: cadetblue;
+    position: relative;
     display: grid;
-    grid-template-rows: 1fr 2em;
+    z-index: 0;
+    overflow: hidden;
 }
 
 .stats-spread {
@@ -68,6 +70,7 @@
     grid-column: 1 / 7;
     width: 100%;
     background-color: #000;
+    border-bottom: 1px inset #ddd;
 }
 
 .stats-spread .bar {
@@ -84,9 +87,6 @@
     grid-row: 5;
     grid-column: 1 / 2;
     width: 120px;
-    border: 1px inset #ddd;
-    border-left: none;
-    border-right: none;
 }
 
 .dialog-container {
@@ -96,9 +96,6 @@
     flex-flow: column;
     justify-content: space-evenly;
     align-items: center;
-    border: 1px inset #ddd;
-    border-left: none;
-    border-right: none;
 }
 
 .left-btn-container,
@@ -136,6 +133,7 @@
     justify-content: center;
     width: 100%;
     padding: 60px;
+    z-index: 100;
 }
 
 .utility-close-btn {
@@ -162,11 +160,13 @@
 }
 
 .choices {
-    margin: 0;
+    position: absolute;
     display: flex;
-    grid-row: 2;
+    width: 100%;
     justify-content: space-evenly;
     align-items: center;
+    bottom: 0;
+    z-index: 100;
 }
 
 .choice {
@@ -249,7 +249,7 @@
     border-radius: 5px;
 }
 
-.inventory-container { grid-template-columns: 1fr 1fr; }
+.inventory-container { grid-template-columns: 1fr 1fr 1fr; }
 .equipment-container { grid-template-columns: 1fr; }
 
 .invItem, .equipItem {
@@ -376,13 +376,49 @@
     }
     
     .inventory-container {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     }
     
     .equipment-container {
         grid-template-columns: 1fr 1fr;
     }
     
+}
+
+/* exploration elements */
+.view-container svg {
+    border: none;
+    position: absolute;
+}
+
+.view-container svg, .view-container img {
+    border: none;
+    position: absolute;
+}
+.view-container svg.ground{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 65%;
+    background-image: linear-gradient(lightgreen, green);
+    /* z-index: 1; */
+}
+
+.view-container svg.water{
+    position: absolute;
+    bottom: 0;
+    width: 25%;
+    height: 65%;
+    background-image: linear-gradient(darkcyan, #003e3e);
+    /* z-index: 2; */
+}
+
+.view-container img:active {
+    transform: rotate(10deg);
+}
+
+.view-container svg.water:active {
+    border: 1px solid cyan;
 }
 
 /* utilities -- note: keep '.hide' at the bottom */

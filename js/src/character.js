@@ -94,22 +94,26 @@ let Character = {
   },
 
   say: function say(text, rate) {
-    let dialogElement = document.querySelector('.dialog');
-    Game.shush('.dialog');
-    
-    let iterate = setInterval(sayChar, rate);
-    let i = 0;
-    let spaceChar = "\xa0";
+    let
+      dialogElement = document.querySelector('.dialog'),
+      charImg = document.querySelector('.character-img'),
+      iterate = setInterval(sayChar, rate),
+      i = 0,
+      spaceChar = "\xa0";
+
+      Game.shush('.dialog');
+      charImg.setAttribute('src', '..\\..\\img\\char.talking.gif');
     
     function sayChar() {
       Character.isBusy = true;
       let char = (text.charAt(i) === " ") ? spaceChar : text.charAt(i);
-        dialogElement.innerText += char;
-        i++;
-        
+      dialogElement.innerText += char;
+      i++;
+      
       if (i >= text.length) {
         clearInterval(iterate);
         Character.isBusy = false;
+        charImg.setAttribute('src', '..\\..\\img\\char.gif');
       }
     }
   },
