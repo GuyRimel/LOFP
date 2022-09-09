@@ -2,6 +2,7 @@ let Game = {
   currentIslandName: "Albatross Isle",
   isConversing: false,
   weather: ["Sunny", 'Cloudy', 'Rainy', 'Snowy', 'Monsoon'],
+  chanceOfWater: .50,
 
   time: {
     seasonsList: [ "Spring", "Summer", "Fall", "Winter" ],
@@ -204,12 +205,12 @@ let Game = {
 
     let
       viewContainer = document.querySelector('.view-container'),
-      isWater = true,
+      isWater = Game.maybeTrue(Game.chanceOfWater),
       oldGens = document.querySelectorAll(
         '.view-container svg, .view-container img'
       );
 
-    console.log(oldGens);
+    console.log(isWater);
     oldGens.forEach( (el) => el.remove() );
 
     function genGround() {
@@ -221,7 +222,6 @@ let Game = {
 
     function genWater() {
       let water = document.createElement('svg');
-
         viewContainer.appendChild(water);
         water.classList.add('water');
         water.addEventListener ('click', (e) => console.log(e.target));
@@ -230,8 +230,8 @@ let Game = {
     function genTrees() {
       let
         tree = document.createElement('img'),
-        treeBottomNumber = Game.getRandomInt(65),
-        treeLeftNumber = Game.getRandomInt();
+        treeBottomNumber = Math.random() * 65,
+        treeLeftNumber = Math.random() * 100;
 
         if(isWater && treeLeftNumber < 25 ) { treeLeftNumber += 25; }
         if(treeLeftNumber > 95 ) { treeLeftNumber = 95; }
@@ -246,16 +246,15 @@ let Game = {
 
     genGround();
     genWater();
-    let max = Game.getRandomInt(5);
-    console.log(max);
-    for(i=0; i < max; i++) {
+    for(i=0; i < (Math.random() * 5); i++) {
       genTrees();
     }
   },
 
-  getRandomInt(max) {
-    if(!max) { max = 100 }
-    return Math.floor(Math.random() * max);
+  // takes a decimal from 0 to 1 probability of true. returns boolean
+  maybeTrue(probability) {
+    if(Math.random() <= probability) { return true }
+    else { return false }
   },
 
   update: () => {
