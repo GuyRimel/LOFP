@@ -238,7 +238,7 @@ let Game = {
 
         viewContainer.appendChild(tree);
         tree.classList.add('tree');
-        tree.src = '../../img/tree01.gif';
+        tree.src = './../../img/tree01.gif';
         tree.style.bottom = treeBottomNumber + '%';
         tree.style.left = treeLeftNumber + '%';
         tree.addEventListener ('click', (e) => console.log(e.target));
