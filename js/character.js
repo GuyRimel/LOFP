@@ -42,12 +42,16 @@ let Character = {
   },
 
   checkup() {
-    if(Character.isDead) { return Character.death(); }
-    if(Character.isExhausted) { return Character.exhausted(); }
-    if(Character.isAsleep) {
-      if(Character.snoozes === 0) { return Game.ask(1); }
-      if(Character.snoozes < 3) { return Game.ask(2); }
-      else{ return Game.ask(3); }
+    if(Character.isDead || Character.stats.health <= 0) { 
+      return Character.death();
+    } if(Character.isExhausted || Character.stats.stamina <= 0) { 
+      return Character.exhausted();
+    } if(Character.isAsleep && Character.snoozes === 0) {
+      return Game.ask(1);
+    } else if(Character.isAsleep && Character.snoozes < 3) {
+      return Game.ask(2);
+    } else if(Character.isAsleep && Character.snoozes >= 3){
+      return Game.ask(3);
     }
   },
 
@@ -82,10 +86,7 @@ let Character = {
         statSpread.style.width = `${percentFull}%`;
       }
     
-    (Character.stats.health <= 0) ?
-      Character.isDead = true : Character.isDead = false;
-    (Character.stats.stamina <= 0) ?
-      Character.isExhausted = true : Character.isExhausted = false;
+      Character.checkup();
     })
   },
   

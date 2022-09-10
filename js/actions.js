@@ -51,7 +51,6 @@ let Actions = (function() {
   }
   
   function explore() {
-    Character.checkup();
     if(Game.isConversing || !Character.isAble()) { return }
     
     let stats = ['stamina', 'skill', 'power']
@@ -71,7 +70,8 @@ let Actions = (function() {
   }
   
   function home() {
-    Character.checkup();
+
+    Game.goHome();
   }
   
   function showEquip() {
@@ -91,6 +91,7 @@ let Actions = (function() {
   }
   
   function gear() {
+
   }
   
   function journal() {

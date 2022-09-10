@@ -21,7 +21,7 @@ let Game = {
     dayStart: function dayStart() {
       document.querySelector(".view-container").style.backgroundColor = "skyblue";
       let weather = document.querySelector(".weather");
-      weather.innerText = Game.weather[Math.floor(Math.random() * 5)];
+      weather.innerText = Game.weather[Game.getRandomInt(5)];
       Game.time.day++;
       if(Game.time.day > 10) {
         Game.time.day = 1;
