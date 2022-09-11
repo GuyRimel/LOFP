@@ -132,7 +132,7 @@ let Game = {
   
   // predefined conversational timing between the game and character
   converse: function converse(charSays, gameSays, delay) {
-    if(Game.isConversing) { return }
+    if(Game.isConversing || !Character.isAble) return;
     Game.isConversing = true;
     
     // order of events: shush both > charSays > gameSays
@@ -237,7 +237,6 @@ let Game = {
       water.style.width = waterWidth + '%';
       water.style.height = groundHeight + '%';
       water.addEventListener ('click', (e) => console.log(e.target));
-      console.log(isWater, waterWidth);
     })();
 
     (function genTrees() {
@@ -249,15 +248,24 @@ let Game = {
   
           if(isWater && treeLeftNumber < 25 ) { treeLeftNumber += waterWidth; }
           if(treeLeftNumber > 95 ) { treeLeftNumber = 95; }
+          if(treeLeftNumber < 5 ) { treeLeftNumber = 5; }
           
           viewContainer.appendChild(tree);
           tree.classList.add('tree');
           tree.src = '../img/tree01.gif';
           tree.style.bottom = treeBottomNumber + '%';
           tree.style.left = treeLeftNumber + '%';
-          tree.addEventListener ('click', (e) => console.log(e.target));
+          tree.addEventListener ('click', (e) => Game.chop(e));
       }
     })();
+  },
+
+  chop: (e) => {
+    let container = document.querySelector('.view-container');
+    let tree = e.target;
+    let chopImg = document.createElement('img');
+    chopImg.src = '../img/impact.svg';
+    container.appendChild(chopImg);
   },
 
   // takes a decimal from 0 to 1 probability of true. returns boolean

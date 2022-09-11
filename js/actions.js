@@ -22,9 +22,7 @@ let Actions = (function() {
   // then, short circuit if the game is conversing or 
   function eat() {
     Character.isExhausted = false;
-    Character.checkup();
     if(Game.isConversing || !Character.isAble()) { return }
-
     Game.time.changeTime(30);
     let stats = ['health', 'stamina'];
     let amounts = [2, 1];
@@ -38,28 +36,20 @@ let Actions = (function() {
   
   function drink() {
     Character.isExhausted = false;
-    Character.checkup();
     if(Game.isConversing || !Character.isAble()) { return }
-
     Game.time.changeTime(30);
     Character.changeStat('stamina', 2);
     Game.converse(
       '*gulp *gulp - hah!',
       'you drink a cool refreshment...',
       300
-    );
-  }
-  
-  function explore() {
-    if(Game.isConversing || !Character.isAble()) { return }
+      );
+    }
     
-    let stats = ['stamina', 'skill', 'power']
-    let amounts = [-2, 2, -2];
-    Character.changeStats(stats, amounts);
-    
+    function explore() {
+    if(Game.isConversing || !Character.isAble()) return;
+    Character.changeStat('stamina', -2);
     Game.time.changeTime(45);
-    if(Character.isAsleep) { return }
-
     Game.converse(
       'let\'s GOOO!!!',
       'off you go exploring...',
@@ -70,7 +60,6 @@ let Actions = (function() {
   }
   
   function home() {
-
     Game.goHome();
   }
   

@@ -57,41 +57,44 @@ let Character = {
 
   // this is meant to take corresponding ARRAYS
   changeStats: (stats, amounts) => {
-    let statSpreadList = [ 'health', 'stamina', 'xp']
-    stats.forEach( (stat, amount) => {
-      Character.stats[stat] += amounts[amount];
-
-      let statValue = Character.stats[stat];
-      let statMax = Character.statMaximums[`${stat}Max`];
-      let statBar = document.querySelector(`.${stat}-bar`);
-      let statSpread;
-      
-      let statSpan = statBar.previousElementSibling;
-      
-      if(statValue > statMax) {
-        Character.stats[stat] = statMax;
-        statValue = statMax;
-      }
-      if(statValue < 0) {
-        Character.stats[stat] = 0;
-        statValue = 0
-      }
-      
-      let percentFull = statValue / statMax * 100;
-      statSpan.innerText = statValue;
-      statBar.style.width = `${percentFull}%`;
-      
-      if(statSpreadList.includes(stat)) {
-        statSpread = document.querySelector(`.stats-spread .${stat}-bar`);
-        statSpread.style.width = `${percentFull}%`;
-      }
-    
-      Character.checkup();
+    stats.forEach( (stat, i) => {
+      let amount = amounts[i];
+      Character.changeStat(stat, amount);
     })
   },
   
   changeStat: (stat, amount) => {
-    Character.changeStats([stat], [amount]);
+    if(!Character.isAble) return;
+    Character.isBusy = true;
+    Character.stats[stat] += amount;
+    let statValue = Character.stats[stat];
+    let statMax = Character.statMaximums[`${stat}Max`];
+
+    if(statValue < 0) {
+      statValue = 0;
+      Character.stats[stat] = 0;
+    } else if(statValue > statMax) {
+      statValue = statMax;
+      Character.stats[stat] = statMax;
+    }
+        
+    let
+    percentFull = statValue / statMax * 100,
+    statBar = document.querySelector(`.${stat}-bar`),
+    statSpan = statBar.previousElementSibling,
+    statSpreadList = [ 'health', 'stamina', 'xp'],
+    statSpread;
+
+    statSpan.innerText = statValue;
+    statBar.style.width = `${percentFull}%`;
+        
+    if(statSpreadList.includes(stat)) {
+      statSpread = document.querySelector(`.stats-spread .${stat}-bar`);
+      statSpread.style.width = `${percentFull}%`;
+    }
+    
+    Character.isBusy = false;
+    Character.checkup();
   },
 
   say: function say(text, rate) {
@@ -120,12 +123,15 @@ let Character = {
   },
 
   answerQuestion: (i) => {
+    if(Game.isConversing) return;
     Game.questions[Game.currentQuestion].responses[i]();
     let choiceContainer = document.querySelector('.choices');
     choiceContainer.classList.add('hide');
   },
   
   exhausted: function() {
+    Character.isExhausted = true;
+    if(Game.isConversing) return;
     Game.converse(
       '*huff *huff... UUUGHH...',
       'You are exhausted! Eat or drink!',
@@ -134,6 +140,8 @@ let Character = {
   },
   
   death: function() {
+    Character.isDead = true;
+    if(Game.isConversing) return;
     Character.isDead = false;
     document.querySelector('.view-container').style.backgroundColor = 'darkred';
     Game.say(`YOU DIED.............`, 60);

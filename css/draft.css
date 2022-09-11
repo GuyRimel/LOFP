@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+canvas {
+    z-index: 100;
+    position: absolute;
+    background-color: lime;
+}
+
 .fullscreen-grid {
     display: grid;
     height: 100vh;
@@ -204,6 +210,8 @@
     height: 7px;
     border-bottom: 2px solid #444;
     border-right: 1px solid black;
+    transition-timing-function: ease-out;
+    transition: width 0.3s;
 }
 
 .level-bar { background-color: darkcyan; }
