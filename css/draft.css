@@ -142,6 +142,14 @@ canvas {
     z-index: 100;
 }
 
+.modal {
+    background-color: beige;
+    border: 2px inset tan;
+    border-radius: 5px;
+    width: 80vw;
+    height: 80vw;
+}
+
 .utility-close-btn {
     position: absolute;
     top: 0;
@@ -155,14 +163,6 @@ canvas {
 
 .utility-close-btn:active {
     color: cyan;
-}
-
-.modal {
-    background-color: beige;
-    border: 2px inset tan;
-    border-radius: 5px;
-    width: 80vw;
-    height: 80vw;
 }
 
 .choices {

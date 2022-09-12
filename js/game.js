@@ -262,10 +262,28 @@ let Game = {
 
   chop: (e) => {
     let container = document.querySelector('.view-container');
-    let tree = e.target;
     let chopImg = document.createElement('img');
+    let tree = e.target;
+    let containerHeight = container.clientHeight;
+    let containerWidth = container.clientWidth;
+    let treeHeightPct = tree.clientHeight / containerHeight;
+    let treeWidthPct = tree.clientWidth / containerWidth;
+    let treeBottomNumber = parseFloat(e.target.style.bottom.replace('%', ''));
+    let treeLeftNumber = parseFloat(e.target.style.left.replace('%', ''));
+    let bottomNumber = treeBottomNumber + (treeHeightPct / 4 * 100);
+    let leftNumber = treeLeftNumber + (treeWidthPct / 4 * 100);
+
     chopImg.src = '../img/impact.svg';
+    chopImg.style.left = leftNumber + '%';
+    chopImg.style.bottom = bottomNumber + '%';
     container.appendChild(chopImg);
+
+    function removeChopImg() {
+      chopImg.remove()
+    }
+
+    setTimeout(removeChopImg, 500);
+
   },
 
   // takes a decimal from 0 to 1 probability of true. returns boolean
