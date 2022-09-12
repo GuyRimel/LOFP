@@ -168,6 +168,34 @@ let genGame = (function genGame() {
 
       statsContainer.classList.add('stats-container');
     })();
+    
+    (function genResources() {
+      let
+      resourceSpread = document.querySelector('.resources-spread'),
+      resourceList = Character.inventory;
+      
+      
+      for (i = 0; i < 6; i++) {
+        let
+          resourceContainer = document.createElement('div'),
+          resourceNameElement = document.createElement('strong'),
+          resourceImgElement = document.createElement('img'),
+          resourceAmtElement = document.createElement('span'),
+          resourceName = resourceList[i].name;
+        
+        resourceSpread.appendChild(resourceContainer);
+        resourceContainer.appendChild(resourceImgElement);
+        resourceContainer.appendChild(resourceNameElement);
+        resourceContainer.appendChild(resourceAmtElement);
+        
+        resourceImgElement.src = `img/${resourceName}.gif`;
+        // resourceImgElement.style.height = '45px';
+        resourceAmtElement.classList.add(`${resourceName}-hud`);
+
+        resourceNameElement.innerText = resourceName + '\xa0';
+        resourceAmtElement.innerText = Character.inventory[i].amt;
+      }
+    })();
   }
 
   // left btn container is usually "eat" "nap" "think" "rage"

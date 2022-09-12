@@ -261,28 +261,26 @@ let Game = {
   },
 
   chop: (e) => {
+    let gameScreen = document.querySelector('.game-screen');
     let container = document.querySelector('.view-container');
-    let chopImg = document.createElement('img');
     let tree = e.target;
-    let containerHeight = container.clientHeight;
-    let containerWidth = container.clientWidth;
-    let treeHeightPct = tree.clientHeight / containerHeight;
-    let treeWidthPct = tree.clientWidth / containerWidth;
-    let treeBottomNumber = parseFloat(e.target.style.bottom.replace('%', ''));
-    let treeLeftNumber = parseFloat(e.target.style.left.replace('%', ''));
-    let bottomNumber = treeBottomNumber + (treeHeightPct / 4 * 100);
-    let leftNumber = treeLeftNumber + (treeWidthPct / 4 * 100);
 
-    chopImg.src = 'img/impact.svg';
-    chopImg.style.left = leftNumber + '%';
-    chopImg.style.bottom = bottomNumber + '%';
-    chopImg.classList.add('pow');
-    container.appendChild(chopImg);
+    Game.pow(e);
+  },
 
-    function removeChopImg() { chopImg.remove() }
+  pow: (e) => {
+    let gameScreen = document.querySelector('.game-screen');
+    let powImg = document.createElement('img');
 
-    setTimeout(removeChopImg, 500);
+    gameScreen.appendChild(powImg);
+    powImg.src = 'img/impact.svg';
+    powImg.classList.add('pow');
+    powImg.style.left = e.x - (powImg.offsetHeight / 2) + 'px';
+    powImg.style.top = e.y - (powImg.offsetWidth / 2) + 'px';
 
+    function removePowImg() { powImg.remove() }
+
+    setTimeout(removePowImg, 150);
   },
 
   // takes a decimal from 0 to 1 probability of true. returns boolean

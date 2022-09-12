@@ -3,9 +3,9 @@ let Actions = (function() {
   let btnArray = [
     // i 0, 1, 2, 3 are the left buttons
     { name: 'eat', perform: eat },
-    { name: 'explore', perform: explore },
+    { name: 'whine', perform: whine },
     { name: 'drink', perform: drink },
-    { name: 'home', perform: home },
+    { name: 'goof', perform: goof },
 
     // i 4, 5, 6, 7 are the right buttons
     { name: 'equip', perform: showEquip },
@@ -13,6 +13,8 @@ let Actions = (function() {
     { name: 'items', perform: inventory },
     { name: 'journal', perform: journal },
 
+    { name: 'Home', perform: goHome },
+    { name: 'Explore', perform: explore },
     { name: 'SP', perform: skillMove },
     { name: 'ATK', perform: attackMove }
   ];
@@ -58,8 +60,16 @@ let Actions = (function() {
 
     Game.generateExplorationArea();
   }
+
+  function whine() {
+    
+  }
+
+  function goof() {
+
+  }
   
-  function home() {
+  function goHome() {
     Game.goHome();
   }
   

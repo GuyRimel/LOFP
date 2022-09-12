@@ -4,10 +4,11 @@
     box-sizing: border-box;
 }
 
-canvas {
-    z-index: 100;
-    position: absolute;
-    background-color: lime;
+.fullscreen-abs {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: greenyellow;
 }
 
 .fullscreen-grid {
@@ -23,7 +24,8 @@ canvas {
 }
 
 .game-screen {
-    grid-template-rows: 1.75em 2em 1fr 21px 120px 120px;
+    overflow: hidden;
+    grid-template-rows: 1.75em 2em 1fr 3em 120px 120px;
     grid-template-columns: 120px 1fr 1fr 1fr 1fr 120px;
 }
 
@@ -71,10 +73,44 @@ canvas {
     overflow: hidden;
 }
 
-.stats-spread {
+.hud-container {
     grid-row: 4;
     grid-column: 1 / 7;
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 1.5em 1.5em;
+    background-color: #000;
+    border-bottom: 1px inset #ddd;
+}
+
+.resources-spread {
+    grid-column: 1 / 7;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    color: white;
+    background-color: #000;
+    border-bottom: 1px inset #ddd;
+}
+
+.resources-spread strong {
+    color: gray;
+    display: none;
+}
+
+.resources-spread div {
+    display: flex;
+    align-items: center;
+}
+
+.resources-spread img {
+    width: 1em;
+    height: 1em;
+}
+
+.stats-spread {
+    grid-column: 1 / 7;
     background-color: #000;
     border-bottom: 1px inset #ddd;
 }
@@ -178,8 +214,7 @@ canvas {
 .choice {
     margin: 0;
     height: 100%;
-    background-color: darkblue;
-    color: lightgray;
+    background-image: linear-gradient(#ddd 66%, cyan);
     padding: 3px 10px;
     border: 1px inset #fff;
     border-top-left-radius: 5px;
@@ -340,11 +375,22 @@ canvas {
     }
 
     .view-container {
-        grid-row: 2;
+        grid-row: 2 / 4;
+        grid-column: 2 / 7;
+    }
+    
+    .hud-container {
+        grid-row: 2 / 4;
+        grid-template-rows: 6fr 1fr;
     }
 
-    .stats-spread {
-        grid-row: 3;
+    .resources-spread {
+        flex-flow: column wrap;
+    }
+
+    .resources-spread strong {
+        color: gray;
+        display: inline-block;
     }
     
     .left-btn-container {
@@ -425,7 +471,11 @@ canvas {
 }
 
 .pow {
-    transition: all 2s linear;
+    position: absolute;
+    width: 50px;
+    height: auto;
+    transition: width 2s linear;
+    z-index: 101;
 }
 
 .view-container svg.water:active {

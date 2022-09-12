@@ -30,6 +30,15 @@ let Character = {
       luckMax: 10,
     },
 
+  inventory: [
+    {name: 'food', amt: '0'},
+    {name: 'water', amt: '0'},
+    {name: 'fiber', amt: '0'},
+    {name: 'wood', amt: '0'},
+    {name: 'stone', amt: '0'},
+    {name: 'gold', amt: '0'}
+  ],
+
   isAble: () => {
     if(
       Character.isDead ||
