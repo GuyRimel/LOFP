@@ -381,7 +381,8 @@
     
     .hud-container {
         grid-row: 2 / 4;
-        grid-template-rows: 6fr 1fr;
+        grid-column: 1;
+        grid-template-rows: 6fr 1.5em;
     }
 
     .resources-spread {
