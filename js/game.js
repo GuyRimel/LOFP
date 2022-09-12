@@ -252,7 +252,7 @@ let Game = {
           
           viewContainer.appendChild(tree);
           tree.classList.add('tree');
-          tree.src = '../img/tree01.gif';
+          tree.src = 'img/tree01.gif';
           tree.style.bottom = treeBottomNumber + '%';
           tree.style.left = treeLeftNumber + '%';
           tree.addEventListener ('click', (e) => Game.chop(e));
@@ -273,14 +273,13 @@ let Game = {
     let bottomNumber = treeBottomNumber + (treeHeightPct / 4 * 100);
     let leftNumber = treeLeftNumber + (treeWidthPct / 4 * 100);
 
-    chopImg.src = '../img/impact.svg';
+    chopImg.src = 'img/impact.svg';
     chopImg.style.left = leftNumber + '%';
     chopImg.style.bottom = bottomNumber + '%';
+    chopImg.classList.add('pow');
     container.appendChild(chopImg);
 
-    function removeChopImg() {
-      chopImg.remove()
-    }
+    function removeChopImg() { chopImg.remove() }
 
     setTimeout(removeChopImg, 500);
 

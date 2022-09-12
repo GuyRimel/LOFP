@@ -424,6 +424,10 @@ canvas {
     transform: rotate(10deg);
 }
 
+.pow {
+    transition: all 2s linear;
+}
+
 .view-container svg.water:active {
     border: 1px solid cyan;
 }

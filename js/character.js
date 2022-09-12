@@ -106,7 +106,7 @@ let Character = {
       spaceChar = "\xa0";
 
       Game.shush('.dialog');
-      charImg.setAttribute('src', '../img/char.talking.gif');
+      charImg.setAttribute('src', 'img/char.talking.gif');
     
     function sayChar() {
       Character.isBusy = true;
@@ -117,7 +117,7 @@ let Character = {
       if (i >= text.length) {
         clearInterval(iterate);
         Character.isBusy = false;
-        charImg.setAttribute('src', '../img/char.gif');
+        charImg.setAttribute('src', 'img/char.gif');
       }
     }
   },
