@@ -6,7 +6,7 @@ let Game = {
   chanceOfWater: .50,
   maxWaterWidth: 40,
   maxTrees: 6,
-
+  
   time: {
     seasonsList: [ "Spring", "Summer", "Fall", "Winter" ],
     season: 0,
@@ -17,10 +17,6 @@ let Game = {
     minutesPerDay: 960, // 16 Hours
     wakeHour: 6,
     sleepHour: 22,
-
-  setGroundColor() {
-
-  },
     
     dayStart: function dayStart() {
       document.querySelector(".view-container").style.backgroundColor = "skyblue";
@@ -35,7 +31,7 @@ let Game = {
           Game.time.year++;
         }
       }
-
+      
       Game.time.minute = 0;
       Game.time.setDate();
       Game.time.changeTime(0);
@@ -48,58 +44,58 @@ let Game = {
         '*yyyyaaaawwn...',
         '. . .',
         2500
-      );
-      setTimeout( () => Game.ask(1), 4000);
+        );
+        setTimeout( () => Game.ask(1), 4000);
+      },
+      
+      convertTime: function convertTime(time) {
+        let hour = Game.time.wakeHour + Math.floor(time / 60);
+        let minute = time % 60;
+        let suffix;
+        (hour > 11 && hour < 24) ? suffix = "pm" : suffix = "am";
+        if (hour > 12) { hour -= 12; }
+        if (minute < 10) { minute = "0" + minute; }
+        
+        let timeString = `${hour}:${minute} ${suffix}`;
+        
+        return timeString;
+      },
+      
+      setDate: function setDate() {
+        let date = document.querySelector(".date");
+        let season = Game.time.season;
+        season = Game.time.seasonsList[season];
+        let day = Game.time.day;
+        let year = Game.time.year;
+        date.innerText = `${season} ${day}, ${year}`;
+      },
+      
+      changeTime: function changeTime(amount) {
+        Game.time.minute += amount;
+        let currentMinute = Game.time.minute;
+        let minutesPerDay = Game.time.minutesPerDay;
+        
+        let time = document.querySelector(".time");
+        let timeBar = document.querySelector(".time-bar");
+        
+        // set the timeBarWidth to a percentage of time remaining in the day
+        let timeBarWidth = 100 - (currentMinute / minutesPerDay) * 100;
+        
+        time.innerText = Game.time.convertTime(currentMinute);
+        timeBar.style.width = timeBarWidth + "%";
+        
+        if (currentMinute >= minutesPerDay) {
+          timeBar.style.width = '0%';
+          Game.time.dayEnd();
+        }
+      },
     },
-    
-    convertTime: function convertTime(time) {
-      let hour = Game.time.wakeHour + Math.floor(time / 60);
-      let minute = time % 60;
-      let suffix;
-      (hour > 11 && hour < 24) ? suffix = "pm" : suffix = "am";
-      if (hour > 12) { hour -= 12; }
-      if (minute < 10) { minute = "0" + minute; }
-
-      let timeString = `${hour}:${minute} ${suffix}`;
-
-      return timeString;
-    },
-
-    setDate: function setDate() {
-      let date = document.querySelector(".date");
-      let season = Game.time.season;
-      season = Game.time.seasonsList[season];
-      let day = Game.time.day;
-      let year = Game.time.year;
-      date.innerText = `${season} ${day}, ${year}`;
-    },
-
-    changeTime: function changeTime(amount) {
-      Game.time.minute += amount;
-      let currentMinute = Game.time.minute;
-      let minutesPerDay = Game.time.minutesPerDay;
-
-      let time = document.querySelector(".time");
-      let timeBar = document.querySelector(".time-bar");
-
-      // set the timeBarWidth to a percentage of time remaining in the day
-      let timeBarWidth = 100 - (currentMinute / minutesPerDay) * 100;
-
-      time.innerText = Game.time.convertTime(currentMinute);
-      timeBar.style.width = timeBarWidth + "%";
-
-      if (currentMinute >= minutesPerDay) {
-        timeBar.style.width = '0%';
-        Game.time.dayEnd();
-      }
-    },
-  },
-
-  say: function say(text) {
-    let feedbackElement = document.querySelector('.feedback');
-    Game.shush('.feedback');
-    feedbackElement.innerText = text;
-  },
+      
+      say: function say(text) {
+        let feedbackElement = document.querySelector('.feedback');
+        Game.shush('.feedback');
+        feedbackElement.innerText = text;
+      },
 
   // here is where the Game.currentQuestion is set
   ask: function ask(questionNumber) {
@@ -314,5 +310,20 @@ let Game = {
 
   update: () => {
     Game.time.changeTime(0);
+  },
+
+  load: () => {
+    let loadedCharacter = localStorage.getItem('LOFPCharacter');
+    JSON.parse(loadedCharacter);
+    console.log(loadedCharacter);
+    
+    let loadedGame = localStorage.getItem('LOFPGame');
+    JSON.parse(loadedGame);
+    console.log(loadedGame);
+  },
+  
+  save: () => {
+    localStorage.setItem('LOFPCharacter', JSON.stringify(Character));
+    localStorage.setItem('LOFPGame', JSON.stringify(Game));
   }
 }

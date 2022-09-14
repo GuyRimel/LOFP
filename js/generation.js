@@ -2,7 +2,7 @@
 // genGame is composed of generating each html container contents
 let genGame = (function genGame() {
   
-  function genNameContainer() {
+  (function genNameContainer() {
     let container = document.querySelector('.name-container');
     let islandName = document.createElement('div');
     
@@ -13,10 +13,10 @@ let genGame = (function genGame() {
     islandName.addEventListener('click', (e) => {
       console.log(e.target);
     });
-  }
+  })();
   
   // the header container is for time display
-  function genHeaderContainer() {
+  (function genHeaderContainer() {
     let container = document.querySelector('.header-container');
     let weatherTimeDate = document.createElement('div');
     let weather = document.createElement('span');
@@ -36,31 +36,29 @@ let genGame = (function genGame() {
     weatherTimeDate.appendChild(date);
     container.appendChild(weatherTimeDate);
     container.appendChild(timeBar);
-  }
+  })();
 
-  function genFunctionBtnContainer() {
+  (function genFunctionBtnContainer() {
     let container = document.querySelector('.function-btn-container');
-    let configBtn = document.createElement('div');
-    let homeBtn = document.createElement('div');
-    let infoBtn = document.createElement('div');
+    let menuBtn = document.createElement('div');
 
-    configBtn.innerText = 'Cfg';
-    homeBtn.innerText = 'Home';
-    infoBtn.innerText = '?';
+    menuBtn.innerText = 'Menu';
+    menuBtn.addEventListener('click', () => {
+      document.querySelector('.menu-screen').classList.remove('hide');
+      document.querySelector('.game-screen').classList.add('hide');
+    })
 
-    container.appendChild(configBtn);
-    container.appendChild(homeBtn);
-    container.appendChild(infoBtn);
-  }
+    container.appendChild(menuBtn);
+  })();
 
   // the right container is toggled to show the equipment, journal, inventory
-  function genUtilityContainer() {
+  (function genUtilityContainer() {
     let container = document.querySelector('.utility-container');
     let containerCloseBtn = document.createElement('div');
 
     container.appendChild(containerCloseBtn);
     
-    containerCloseBtn.classList.add('utility-close-btn');
+    containerCloseBtn.classList.add('close-btn');
     containerCloseBtn.innerText = 'Close';
     containerCloseBtn.addEventListener('click', () => Actions.closeUtility());
     
@@ -196,11 +194,11 @@ let genGame = (function genGame() {
         resourceAmtElement.innerText = Character.inventory[i].amt;
       }
     })();
-  }
+  })();
 
   // left btn container is usually "eat" "nap" "think" "rage"
   // right btn container is "tool", "inv", "look", "journal"
-  function genBtnContainers() {
+  (function genBtnContainers() {
     let leftBtnContainer = document.querySelector('.left-btn-container');
     let middleBtnContainer = document.querySelector('.middle-btn-container');
     let rightBtnContainer = document.querySelector('.right-btn-container');
@@ -228,10 +226,10 @@ let genGame = (function genGame() {
       if(i > 7) { container = middleBtnContainer }
       genBtns(container, i);
     }
-  }
+  })();
 
   // also displays interactive feedback 
-  function genCharacterContainer() {
+  (function genCharacterContainer() {
     let container = document.querySelector('.character-container')
     let charImg = document.createElement('img');
     
@@ -240,10 +238,10 @@ let genGame = (function genGame() {
     charImg.classList.add('character-img');
     charImg.setAttribute('src', 'img/char.gif');
     charImg.addEventListener( 'click', () => Actions.showStats());
-  }
+  })();
 
   // also displays interactive feedback 
-  function genDialogContainer() {
+  (function genDialogContainer() {
     let container = document.querySelector('.dialog-container')
     let feedback = document.createElement('div');
     let dialog = document.createElement('div');
@@ -252,11 +250,11 @@ let genGame = (function genGame() {
     dialog.classList.add('dialog');
     container.appendChild(feedback);
     container.appendChild(dialog);
-  }
+  })();
 
   /* the view container is the big middle screen, here is where things will appear after an action is performed.
   for example, after performing "fish" a fish image would pop up and the dialog would describe the result of the fish action */
-  function genViewContainer() {
+  (function genViewContainer() {
     let
       container = document.querySelector('.view-container'),
       choicesContainer = document.createElement('div');
@@ -273,18 +271,55 @@ let genGame = (function genGame() {
       });
       choicesContainer.appendChild(choiceElement);
     }
-  }
-  
-  genNameContainer();
-  genHeaderContainer();
-  genFunctionBtnContainer();
-  genUtilityContainer();
-  genBtnContainers();
-  genCharacterContainer();
-  genDialogContainer();
-  genViewContainer();
-  Game.time.dayStart();
+  })();
+
+  (function genMenuContainer() {
+    let container = document.querySelector('.menu-screen');
+    
+    container.innerHTML =
+    `
+    <h1>MENUUUU</h1>
+    <h2>Data</h2>
+    <section>
+    <div>
+    <button class="save-btn">Save</button>
+    <button class="load-btn">Load</button>
+    </div>
+    </section>
+    <h2>Tutorial</h2>
+    <section>
+    <h3>Eating</h3>
+    <em>(Health + 5)</em>
+    <p>To eat something, put it in your mouth. Chew it. yuuuummmm..</p>
+    <p>That's called "eating", you frik'n moron.</p>
+    <br>
+    <h3>Drinking</h3>
+    <em>(Stamina + 5)</em>
+    <p>To drink something, first ensure that it is a liquid. Create suction with your mouth in the shape of an "O". Be sure not to try and breathe the liquid into your lung cavities.</p>
+    <p>Modern Lungologists call this "drowning", thumbs-for-brains</p>
+    </section>
+    `;
+    
+    let saveBtn = document.querySelector('.save-btn');
+    let loadBtn = document.querySelector('.load-btn');
+
+    saveBtn.addEventListener('click', Game.save);
+    loadBtn.addEventListener('click', Game.load);
+
+    let containerCloseBtn = document.createElement('div');
+    container.appendChild(containerCloseBtn);
+    
+    containerCloseBtn.classList.add('close-btn');
+    containerCloseBtn.innerText = 'Close';
+    containerCloseBtn.addEventListener('click', () => {
+      document.querySelector('.game-screen').classList.remove('hide');
+      container.classList.add('hide');
+    });
+  })();
+
+// end of genGame IIFE
 })();
 
+Game.time.dayStart();
 Character.update();
 Game.update();
