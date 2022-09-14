@@ -73,6 +73,11 @@
     overflow: hidden;
 }
 
+.view-container.home {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 10% repeat(4, 1fr);
+}
+
 .hud-container {
     grid-row: 4;
     grid-column: 1 / 7;
@@ -373,6 +378,11 @@
         grid-row: 1;
         grid-column: 2 / 6;
     }
+    
+    .view-container.home {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 10% repeat(8, 1fr);
+    }
 
     .view-container {
         grid-row: 2 / 4;
@@ -454,9 +464,8 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 65%;
+    height: 90%;
     background-image: linear-gradient(lightgreen, green);
-    /* z-index: 1; */
 }
 
 .view-container svg.water{
@@ -464,7 +473,6 @@
     bottom: 0;
     height: 65%;
     background-image: linear-gradient(darkcyan, #003e3e);
-    /* z-index: 2; */
 }
 
 .view-container img:active {

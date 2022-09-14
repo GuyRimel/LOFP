@@ -17,6 +17,10 @@ let Game = {
     minutesPerDay: 960, // 16 Hours
     wakeHour: 6,
     sleepHour: 22,
+
+  setGroundColor() {
+
+  },
     
     dayStart: function dayStart() {
       document.querySelector(".view-container").style.backgroundColor = "skyblue";
@@ -203,22 +207,21 @@ let Game = {
       ]
     }
   ],
-
+  
   generateExplorationArea() {
     let
-      viewContainer = document.querySelector('.view-container'),
-      groundHeight = 0,
-      isWater = Game.maybeTrue(Game.chanceOfWater),
-      waterWidth = Game.getRandomInt(Game.maxWaterWidth),
-      treesInArea = Game.getRandomInt(Game.maxTrees),
-      oldGens = document.querySelectorAll('.view-container svg, .view-container img');
-      
-
+    viewContainer = document.querySelector('.view-container'),
+    groundHeight = 0,
+    isWater = Game.maybeTrue(Game.chanceOfWater),
+    waterWidth = Game.getRandomInt(Game.maxWaterWidth),
+    treesInArea = Game.getRandomInt(Game.maxTrees);
+    
     while(groundHeight < 40) {
       groundHeight = Game.getRandomInt(Game.maxGroundHeight);
     }
-
-    oldGens.forEach( (el) => el.remove() );
+    
+    viewContainer.classList.remove('home');
+    Game.removeOldGens();
 
     (function genGround() {
       let ground = document.createElement('svg');
@@ -281,6 +284,22 @@ let Game = {
     function removePowImg() { powImg.remove() }
 
     setTimeout(removePowImg, 150);
+  },
+
+  goHome: () => {
+    let container = document.querySelector('.view-container');
+    let ground = document.createElement('svg');
+    Game.removeOldGens();
+    container.classList.add('home');
+    container.appendChild(ground);
+    ground.classList.add('ground');
+
+    
+  },
+
+  removeOldGens: () => {
+    let oldGens = document.querySelectorAll('.view-container svg, .view-container img');
+    oldGens.forEach( (el) => el.remove() );
   },
 
   // takes a decimal from 0 to 1 probability of true. returns boolean
