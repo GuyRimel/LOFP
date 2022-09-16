@@ -259,7 +259,7 @@
 .stamina-bar { background-color: lime; }
 .skill-bar { background-color: orange; }
 .power-bar { background-color: purple; }
-.luck-bar { background-color: gold; }
+.agility-bar { background-color: cornflowerblue; }
 
 .weather-time-date {
     width: 100%;

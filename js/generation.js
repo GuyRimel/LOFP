@@ -170,8 +170,7 @@ let genGame = (function genGame() {
     (function genResources() {
       let
       resourceSpread = document.querySelector('.resources-spread'),
-      resourceList = Character.inventory;
-      
+      resourceList = Object.keys(Character.resources);      
       
       for (i = 0; i < 6; i++) {
         let
@@ -179,7 +178,7 @@ let genGame = (function genGame() {
           resourceNameElement = document.createElement('strong'),
           resourceImgElement = document.createElement('img'),
           resourceAmtElement = document.createElement('span'),
-          resourceName = resourceList[i].name;
+          resourceName = resourceList[i];
         
         resourceSpread.appendChild(resourceContainer);
         resourceContainer.appendChild(resourceImgElement);
@@ -191,7 +190,7 @@ let genGame = (function genGame() {
         resourceAmtElement.classList.add(`${resourceName}-hud`);
 
         resourceNameElement.innerText = resourceName + '\xa0';
-        resourceAmtElement.innerText = Character.inventory[i].amt;
+        resourceAmtElement.innerText = Character.resources[resourceName];
       }
     })();
   })();
@@ -265,7 +264,7 @@ let genGame = (function genGame() {
       let choiceElement = document.createElement('span');
       choiceElement.classList.add('choice', 'hide');
       choiceElement.setAttribute("data-choice-number", i);
-      choiceElement.addEventListener( 'click', (e) => {
+      choiceElement.addEventListener('click', (e) => {
         let choiceNumber = e.target.getAttribute("data-choice-number");
         Character.answerQuestion(choiceNumber);
       });
@@ -320,6 +319,6 @@ let genGame = (function genGame() {
 // end of genGame IIFE
 })();
 
-Game.time.dayStart();
+Game.load();
 Character.update();
 Game.update();

@@ -1,7 +1,9 @@
 let Game = {
+  islandNameList: ["Albatross Isle", "Bramble Island", "Corsair Cove"],
   currentIslandName: "Albatross Isle",
   isConversing: false,
-  weather: ["Sunny", 'Cloudy', 'Rainy', 'Snowy', 'Monsoon'],
+  weatherList: ["Sunny", 'Cloudy', 'Rainy', 'Snowy', 'Monsoon'],
+  weather: "Sunny",
   maxGroundHeight: 65,
   chanceOfWater: .50,
   maxWaterWidth: 40,
@@ -21,7 +23,8 @@ let Game = {
     dayStart: function dayStart() {
       document.querySelector(".view-container").style.backgroundColor = "skyblue";
       let weather = document.querySelector(".weather");
-      weather.innerText = Game.weather[Game.getRandomInt(5)];
+      Game.weather = Game.weatherList[Game.getRandomInt(5)];
+      weather.innerText = Game.weather;
       Game.time.day++;
       if(Game.time.day > 10) {
         Game.time.day = 1;
@@ -313,17 +316,62 @@ let Game = {
   },
 
   load: () => {
-    let loadedCharacter = localStorage.getItem('LOFPCharacter');
-    JSON.parse(loadedCharacter);
-    console.log(loadedCharacter);
+    let loadedData = localStorage.getItem('LOFPData');
+    loadedData = JSON.parse(loadedData);
+    console.log(loadedData);
     
-    let loadedGame = localStorage.getItem('LOFPGame');
-    JSON.parse(loadedGame);
-    console.log(loadedGame);
+    Game.currentIslandName= loadedData[0];
+    Game.weather= loadedData[1];
+    Game.chanceOfWater= parseFloat(loadedData[2]);
+    Game.maxWaterWidth= parseInt(loadedData[3]);
+    Game.maxTrees= parseInt(loadedData[4]);
+    Game.time.year= parseInt(loadedData[5]);
+    Game.time.season= parseInt(loadedData[6]);
+    Game.time.day= parseInt(loadedData[7]);
+    Game.time.minute= parseInt(loadedData[8]);
+    Character.name= parseInt(loadedData[9]);
+    Character.xpTilLevelup= parseInt(loadedData[10]);
+    Character.snoozes= parseInt(loadedData[11]);
+
+    // setting each loaded object key to the matching Character.stats object key
+    Object.keys(Character.stats).forEach ((stat) => {
+      Character.stats[stat] = loadedData[12][stat];
+    });
+    
+    // setting each loaded object key to the matching Character.statMaximums object key
+    Object.keys(Character.statMaximums).forEach ((statMax) => {
+      Character.statMaximums[statMax] = loadedData[13][statMax];
+    });
+    
+    // clearing the current inventory array, and loading the inventory array from storage
+    //  NOTE TO SELF: loading an array is way clearer than loading an object...
+    Character.inventory.length = 0;
+    loadedData[14].forEach((item) => Character.inventory.push(item));
   },
   
   save: () => {
-    localStorage.setItem('LOFPCharacter', JSON.stringify(Character));
-    localStorage.setItem('LOFPGame', JSON.stringify(Game));
+    let LOFPData = [];
+    LOFPData.push(
+      Game.currentIslandName,
+      Game.weather,
+      Game.chanceOfWater,
+      Game.maxWaterWidth,
+      Game.maxTrees,
+      Game.time.year,
+      Game.time.season,
+      Game.time.day,
+      Game.time.minute,
+      Character.name,
+      Character.xpTilLevelup,
+      Character.snoozes,
+      Character.stats,
+      Character.statMaximums,
+      Character.inventory
+    );
+
+    localStorage.setItem('LOFPData', JSON.stringify(LOFPData));
+
+    console.log(LOFPData);
   }
 }
+

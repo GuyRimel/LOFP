@@ -1,4 +1,3 @@
-
 let Character = {
   name: "Francis",
   xpTilLevelup: 1000,
@@ -16,7 +15,7 @@ let Character = {
     stamina: 10,
     skill: 10,
     power: 10,
-    luck: 10
+    agility: 10
   },
   
   statMaximums: {
@@ -25,18 +24,22 @@ let Character = {
       healthMax: 10,
       staminaMax: 10,
       skillMax: 10,
-      skillMax: 10,
       powerMax: 10,
-      luckMax: 10,
-    },
+      agilityMax: 10,
+  },
+
+  resources: {
+    food: 0,
+    water: 0,
+    fiber: 0,
+    wood: 0,
+    stone: 0,
+    gold: 0
+  },
 
   inventory: [
-    {name: 'food', amt: '0'},
-    {name: 'water', amt: '0'},
-    {name: 'fiber', amt: '0'},
-    {name: 'wood', amt: '0'},
-    {name: 'stone', amt: '0'},
-    {name: 'gold', amt: '0'}
+    { apples: 3 },
+    { oranges: 5 }
   ],
 
   isAble: () => {
