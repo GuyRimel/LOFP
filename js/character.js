@@ -141,9 +141,8 @@ let Character = {
     choiceContainer.classList.add('hide');
   },
   
-  exhausted: function() {
+  exhausted: () => {
     Character.isExhausted = true;
-    if(Game.isConversing) return;
     Game.converse(
       '*huff *huff... UUUGHH...',
       'You are exhausted! Eat or drink!',
@@ -151,11 +150,10 @@ let Character = {
     )
   },
   
-  death: function() {
+  death: () => {
     Character.isDead = true;
-    if(Game.isConversing) return;
-    Character.isDead = false;
-    document.querySelector('.view-container').style.backgroundColor = 'darkred';
+    Game.shush();
+    document.querySelector('.sky-front').style.backgroundColor = 'darkred';
     Game.say(`YOU DIED.............`, 60);
   },
   
@@ -164,5 +162,6 @@ let Character = {
     for(i=0; i < statNameArray.length; i++) {
       Character.changeStat(statNameArray[i], 0);
     }
+    Character.checkup();
   }
 };

@@ -256,10 +256,18 @@ let genGame = (function genGame() {
   (function genViewContainer() {
     let
       container = document.querySelector('.view-container'),
+      skyMid = document.createElement('div'),
+      skyFront = document.createElement('div'),
       choicesContainer = document.createElement('div');
 
+    container.appendChild(skyMid);
+    container.appendChild(skyFront);
     container.appendChild(choicesContainer);
+    container.classList.add('sky-back');
+    skyMid.classList.add('sky-mid');
+    skyFront.classList.add('sky-front');
     choicesContainer.classList.add('choices');
+
     for(i=0; i<3; i++) {
       let choiceElement = document.createElement('span');
       choiceElement.classList.add('choice', 'hide');
@@ -320,5 +328,3 @@ let genGame = (function genGame() {
 })();
 
 Game.load();
-Character.update();
-Game.update();

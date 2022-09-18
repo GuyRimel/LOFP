@@ -24,41 +24,48 @@ let Actions = (function() {
   // then, short circuit if the game is conversing or 
   function eat() {
     Character.isExhausted = false;
-    if(Game.isConversing || !Character.isAble()) { return }
-    Game.time.changeTime(30);
-    let stats = ['health', 'stamina'];
-    let amounts = [2, 1];
-    Character.changeStats(stats, amounts);
-    Game.converse(
-      'munch, munch - *BURP',
-      'you snack on food...',
-      300
-    );
-  }
+    if(Character.isAble()) {
+      Game.time.changeTime(30);
+      Character.changeStat('health', 3);
+      Character.changeStat('stamina', 2);
+      if(Character.isAble()) {
+        Game.converse(
+          'munch, munch - *BURP',
+          'you snack on food...',
+          300
+        );
+      };
+    };
+  };
   
   function drink() {
     Character.isExhausted = false;
-    if(Game.isConversing || !Character.isAble()) { return }
-    Game.time.changeTime(30);
-    Character.changeStat('stamina', 2);
-    Game.converse(
-      '*gulp *gulp - hah!',
-      'you drink a cool refreshment...',
-      300
-      );
+    if(Character.isAble()) {
+      Game.time.changeTime(30);
+      Character.changeStat('stamina', 5);
+      if(Character.isAble()) {
+        Game.converse(
+          '*gulp *gulp - hah!',
+          'you drink a cool refreshment...',
+          300
+        );
+      };
+    };
+  };
+  
+  function explore() {
+    if(Character.isAble()) {
+      Game.time.changeTime(45);
+      Character.changeStat('stamina', -2)
     }
-    
-    function explore() {
-    if(Game.isConversing || !Character.isAble()) return;
-    Character.changeStat('stamina', -2);
-    Game.time.changeTime(45);
-    Game.converse(
-      'let\'s GOOO!!!',
-      'off you go exploring...',
-      300
-    );
-
-    Game.generateExplorationArea();
+    if(Character.isAble()) {
+      Game.converse(
+        'let\'s GOOO!!!',
+        'off you go exploring...',
+        300
+      )
+      Game.generateExplorationArea();
+    }
   }
 
   function whine() {
@@ -69,8 +76,8 @@ let Actions = (function() {
 
   }
   
-  function goHome() {
-    Game.goHome();
+  function goHome(isLoaded) {
+    Game.goHome(isLoaded);
   }
   
   function showEquip() {
@@ -162,7 +169,8 @@ let Actions = (function() {
     snooze: snooze,
     dream: dream,
     showStats: showStats,
-    closeUtility: closeUtility
+    closeUtility: closeUtility,
+    goHome: goHome
   }
 
 })();

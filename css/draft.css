@@ -9,6 +9,12 @@
     width: 100vw;
 }
 
+.fullscreen-abs {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+}
+
 .fullscreen-grid {
     display: grid;
     height: 100vh;
@@ -65,16 +71,26 @@
 .view-container {
     grid-row: 3;
     grid-column: 1 / 7;
-    background-color: cadetblue;
     position: relative;
     display: grid;
-    z-index: 0;
     overflow: hidden;
 }
 
 .view-container.home {
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: 10% repeat(4, 1fr);
+}
+
+.sky-mid {
+    position: absolute;
+    width: inherit;
+    height: inherit;
+}
+
+.sky-front {
+    position: absolute;
+    width: inherit;
+    height: inherit;
 }
 
 .hud-container {
@@ -212,7 +228,7 @@
     justify-content: space-evenly;
     align-items: center;
     bottom: 0;
-    z-index: 100;
+    z-index: 1;
 }
 
 .choice {

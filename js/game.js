@@ -4,6 +4,7 @@ let Game = {
   isConversing: false,
   weatherList: ["Sunny", 'Cloudy', 'Rainy', 'Snowy', 'Monsoon'],
   weather: "Sunny",
+  areCloudsSet: false,
   maxGroundHeight: 65,
   chanceOfWater: .50,
   maxWaterWidth: 40,
@@ -21,7 +22,6 @@ let Game = {
     sleepHour: 22,
     
     dayStart: function dayStart() {
-      document.querySelector(".view-container").style.backgroundColor = "skyblue";
       let weather = document.querySelector(".weather");
       Game.weather = Game.weatherList[Game.getRandomInt(5)];
       weather.innerText = Game.weather;
@@ -42,63 +42,100 @@ let Game = {
     
     dayEnd: function dayEnd() {
       Character.isAsleep = true;
-      document.querySelector(".view-container").style.backgroundColor = "darkblue";
       Game.converse(
         '*yyyyaaaawwn...',
         '. . .',
         2500
-        );
-        setTimeout( () => Game.ask(1), 4000);
-      },
-      
-      convertTime: function convertTime(time) {
-        let hour = Game.time.wakeHour + Math.floor(time / 60);
-        let minute = time % 60;
-        let suffix;
-        (hour > 11 && hour < 24) ? suffix = "pm" : suffix = "am";
-        if (hour > 12) { hour -= 12; }
-        if (minute < 10) { minute = "0" + minute; }
-        
-        let timeString = `${hour}:${minute} ${suffix}`;
-        
-        return timeString;
-      },
-      
-      setDate: function setDate() {
-        let date = document.querySelector(".date");
-        let season = Game.time.season;
-        season = Game.time.seasonsList[season];
-        let day = Game.time.day;
-        let year = Game.time.year;
-        date.innerText = `${season} ${day}, ${year}`;
-      },
-      
-      changeTime: function changeTime(amount) {
-        Game.time.minute += amount;
-        let currentMinute = Game.time.minute;
-        let minutesPerDay = Game.time.minutesPerDay;
-        
-        let time = document.querySelector(".time");
-        let timeBar = document.querySelector(".time-bar");
-        
-        // set the timeBarWidth to a percentage of time remaining in the day
-        let timeBarWidth = 100 - (currentMinute / minutesPerDay) * 100;
-        
-        time.innerText = Game.time.convertTime(currentMinute);
-        timeBar.style.width = timeBarWidth + "%";
-        
-        if (currentMinute >= minutesPerDay) {
-          timeBar.style.width = '0%';
-          Game.time.dayEnd();
-        }
-      },
+      );
+      setTimeout( () => Game.ask(1), 4000);
     },
+    
+    convertTime: function convertTime(time) {
+      let hour = Game.time.wakeHour + Math.floor(time / 60);
+      let minute = time % 60;
+      let suffix;
+      (hour > 11 && hour < 24) ? suffix = "pm" : suffix = "am";
+      if (hour > 12) { hour -= 12; }
+      if (minute < 10) { minute = "0" + minute; }
       
-      say: function say(text) {
-        let feedbackElement = document.querySelector('.feedback');
-        Game.shush('.feedback');
-        feedbackElement.innerText = text;
-      },
+      let timeString = `${hour}:${minute} ${suffix}`;
+      
+      return timeString;
+    },
+    
+    setDate: function setDate() {
+      let date = document.querySelector(".date");
+      let season = Game.time.season;
+      season = Game.time.seasonsList[season];
+      let day = Game.time.day;
+      let year = Game.time.year;
+      date.innerText = `${season} ${day}, ${year}`;
+    },
+    
+    changeTime: function changeTime(amount) {
+      Game.time.minute += amount;
+      let currentMinute = Game.time.minute;
+      let minutesPerDay = Game.time.minutesPerDay;
+      
+      let time = document.querySelector(".time");
+      let timeBar = document.querySelector(".time-bar");
+      
+      // set the timeBarWidth to a percentage of time remaining in the day
+      let timeBarWidth = 100 - (currentMinute / minutesPerDay) * 100;
+      
+      time.innerText = Game.time.convertTime(currentMinute);
+      timeBar.style.width = timeBarWidth + "%";
+
+      Game.setSky();
+      
+      if (currentMinute >= minutesPerDay) {
+        timeBar.style.width = '0%';
+        Game.time.dayEnd();
+      }
+    },
+  },
+
+  setSky: () => {
+    let skyBack = document.querySelector('.sky-back');
+    let skyMid = document.querySelector('.sky-mid');
+    let skyFront = document.querySelector('.sky-front');
+    let minute = Game.time.minute;
+    let frontAlpha;
+    let midAlpha;
+    
+    if(minute < 240) {
+      frontAlpha = minute / 240;
+      midAlpha = frontAlpha * 3;
+      if(midAlpha > 1) midAlpha = 1;
+      // color of "morning sunlight"
+      skyMid.style.backgroundImage =
+        `radial-gradient(hsla(45, 100%, 50%, ${midAlpha}), #0000)`;
+    } else if(minute > 660){
+      frontAlpha = 1 - (minute % 660 / 300);
+      if(frontAlpha < 0) frontAlpha = 0;
+      midAlpha = frontAlpha * 3;
+      //color of "evening sunlight"
+      skyMid.style.backgroundImage =
+        `radial-gradient(hsla(15, 100%, 50%, ${midAlpha}), #0000)`;
+    } else {
+      midAlpha = 0;
+      frontAlpha = 1;
+    }
+
+    skyBack.style.backgroundColor =
+      // full night blue: 'hsla(247, 76%, 27%, 1)';
+      'hsla(247, 76%, 27%, 1)';
+
+    skyFront.style.backgroundColor =
+      // full noon blue: 'hsla(197, 71%, 73%, 1)';
+      `hsla(197, 71%, 73%, ${frontAlpha})`;
+  },
+    
+  say: function say(text) {
+    let feedbackElement = document.querySelector('.feedback');
+    Game.shush('.feedback');
+    feedbackElement.innerText = text;
+  },
 
   // here is where the Game.currentQuestion is set
   ask: function ask(questionNumber) {
@@ -135,17 +172,17 @@ let Game = {
   
   // predefined conversational timing between the game and character
   converse: function converse(charSays, gameSays, delay) {
-    if(Game.isConversing || !Character.isAble) return;
-    Game.isConversing = true;
-    
-    // order of events: shush both > charSays > gameSays
-    // 'delay' is when the game responds
-    let charSpeakingRate = Math.floor(delay / charSays.length);
-    if( charSpeakingRate < 10 ) { charSpeakingRate = 10; }
-    Game.shush();
-    Character.say(charSays, charSpeakingRate);
-    setTimeout(() => Game.say(gameSays), delay + 400);
-    Game.isConversing = false;
+    if(!Character.isBusy && !Game.isConversing){
+      Game.isConversing = true;
+      // order of events: shush both > charSays > gameSays
+      // 'delay' is when the game responds
+      let charSpeakingRate = Math.floor(delay / charSays.length);
+      if( charSpeakingRate < 10 ) { charSpeakingRate = 10; }
+      Game.shush();
+      Character.say(charSays, charSpeakingRate);
+      setTimeout(() => Game.say(gameSays), delay + 400);
+      Game.isConversing = false;
+    }
   },
 
   // this is where the magic happens
@@ -285,15 +322,26 @@ let Game = {
     setTimeout(removePowImg, 150);
   },
 
-  goHome: () => {
+  goHome: (isLoaded) => {
     let container = document.querySelector('.view-container');
     let ground = document.createElement('svg');
     Game.removeOldGens();
     container.classList.add('home');
     container.appendChild(ground);
     ground.classList.add('ground');
-
-    
+    if(isLoaded) {
+      Game.converse(
+        'weeeird ... it feels like the world has been... loaded, or something...',
+        '- Game Loaded -',
+        1200
+      )
+    } else {
+      Game.converse(
+        'aaah, time to kick back...',
+        'You made it back home.',
+        1000
+      );
+    };
   },
 
   removeOldGens: () => {
@@ -318,42 +366,50 @@ let Game = {
   load: () => {
     let loadedData = localStorage.getItem('LOFPData');
     loadedData = JSON.parse(loadedData);
-    console.log(loadedData);
-    
+
     Game.currentIslandName= loadedData[0];
     Game.weather= loadedData[1];
-    Game.chanceOfWater= parseFloat(loadedData[2]);
-    Game.maxWaterWidth= parseInt(loadedData[3]);
-    Game.maxTrees= parseInt(loadedData[4]);
-    Game.time.year= parseInt(loadedData[5]);
-    Game.time.season= parseInt(loadedData[6]);
-    Game.time.day= parseInt(loadedData[7]);
-    Game.time.minute= parseInt(loadedData[8]);
-    Character.name= parseInt(loadedData[9]);
-    Character.xpTilLevelup= parseInt(loadedData[10]);
-    Character.snoozes= parseInt(loadedData[11]);
+    Game.isWeatherMoving= parseInt(loadedData[2]);
+    Game.chanceOfWater= parseFloat(loadedData[3]);
+    Game.maxWaterWidth= parseInt(loadedData[4]);
+    Game.maxTrees= parseInt(loadedData[5]);
+    Game.time.year= parseInt(loadedData[6]);
+    Game.time.season= parseInt(loadedData[7]);
+    Game.time.day= parseInt(loadedData[8]);
+    Game.time.minute= parseInt(loadedData[9]);
+    Character.name= parseInt(loadedData[10]);
+    Character.xpTilLevelup= parseInt(loadedData[11]);
+    Character.snoozes= parseInt(loadedData[12]);
 
     // setting each loaded object key to the matching Character.stats object key
     Object.keys(Character.stats).forEach ((stat) => {
-      Character.stats[stat] = loadedData[12][stat];
+      Character.stats[stat] = loadedData[13][stat];
     });
     
     // setting each loaded object key to the matching Character.statMaximums object key
     Object.keys(Character.statMaximums).forEach ((statMax) => {
-      Character.statMaximums[statMax] = loadedData[13][statMax];
+      Character.statMaximums[statMax] = loadedData[14][statMax];
     });
     
     // clearing the current inventory array, and loading the inventory array from storage
     //  NOTE TO SELF: loading an array is way clearer than loading an object...
     Character.inventory.length = 0;
-    loadedData[14].forEach((item) => Character.inventory.push(item));
+    loadedData[15].forEach((item) => Character.inventory.push(item));
+
+    Character.update();
+    Game.update();
+    Actions.goHome('loaded');
   },
   
   save: () => {
+    Character.update();
+    Game.update();
+
     let LOFPData = [];
     LOFPData.push(
       Game.currentIslandName,
       Game.weather,
+      Game.isWeatherMoving,
       Game.chanceOfWater,
       Game.maxWaterWidth,
       Game.maxTrees,
