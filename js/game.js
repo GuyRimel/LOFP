@@ -4,7 +4,6 @@ let Game = {
   isConversing: false,
   weatherList: ["Sunny", 'Cloudy', 'Rainy', 'Snowy', 'Monsoon'],
   weather: "Sunny",
-  areCloudsSet: false,
   maxGroundHeight: 65,
   chanceOfWater: .50,
   maxWaterWidth: 40,
@@ -364,41 +363,43 @@ let Game = {
   },
 
   load: () => {
+    Actions.goHome('loaded');
+    Character.update();
+    Game.update();
+
     let loadedData = localStorage.getItem('LOFPData');
     loadedData = JSON.parse(loadedData);
 
     Game.currentIslandName= loadedData[0];
     Game.weather= loadedData[1];
-    Game.isWeatherMoving= parseInt(loadedData[2]);
-    Game.chanceOfWater= parseFloat(loadedData[3]);
-    Game.maxWaterWidth= parseInt(loadedData[4]);
-    Game.maxTrees= parseInt(loadedData[5]);
-    Game.time.year= parseInt(loadedData[6]);
-    Game.time.season= parseInt(loadedData[7]);
-    Game.time.day= parseInt(loadedData[8]);
-    Game.time.minute= parseInt(loadedData[9]);
-    Character.name= parseInt(loadedData[10]);
-    Character.xpTilLevelup= parseInt(loadedData[11]);
-    Character.snoozes= parseInt(loadedData[12]);
+    Game.chanceOfWater= parseFloat(loadedData[2]);
+    Game.maxWaterWidth= parseInt(loadedData[3]);
+    Game.maxTrees= parseInt(loadedData[4]);
+    Game.time.year= parseInt(loadedData[5]);
+    Game.time.season= parseInt(loadedData[6]);
+    Game.time.day= parseInt(loadedData[7]);
+    Game.time.minute= parseInt(loadedData[8]);
+    Character.name= parseInt(loadedData[9]);
+    Character.xpTilLevelup= parseInt(loadedData[10]);
+    Character.snoozes= parseInt(loadedData[11]);
 
     // setting each loaded object key to the matching Character.stats object key
     Object.keys(Character.stats).forEach ((stat) => {
-      Character.stats[stat] = loadedData[13][stat];
+      Character.stats[stat] = loadedData[12][stat];
     });
     
     // setting each loaded object key to the matching Character.statMaximums object key
     Object.keys(Character.statMaximums).forEach ((statMax) => {
-      Character.statMaximums[statMax] = loadedData[14][statMax];
+      Character.statMaximums[statMax] = loadedData[13][statMax];
     });
     
     // clearing the current inventory array, and loading the inventory array from storage
     //  NOTE TO SELF: loading an array is way clearer than loading an object...
     Character.inventory.length = 0;
-    loadedData[15].forEach((item) => Character.inventory.push(item));
+    loadedData[14].forEach((item) => Character.inventory.push(item));
 
     Character.update();
     Game.update();
-    Actions.goHome('loaded');
   },
   
   save: () => {
@@ -409,7 +410,6 @@ let Game = {
     LOFPData.push(
       Game.currentIslandName,
       Game.weather,
-      Game.isWeatherMoving,
       Game.chanceOfWater,
       Game.maxWaterWidth,
       Game.maxTrees,

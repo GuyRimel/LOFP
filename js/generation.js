@@ -230,12 +230,21 @@ let genGame = (function genGame() {
   // also displays interactive feedback 
   (function genCharacterContainer() {
     let container = document.querySelector('.character-container')
-    let charImg = document.createElement('img');
+    let charBody = document.createElement('img');
+    let charHead = document.createElement('img');
+    let charMouth = document.createElement('img');
+    let charEyeBalls = document.createElement('img');
+    let charEyes = document.createElement('img');
+    let charBrows = document.createElement('img');
     
-    container.appendChild(charImg);
+    container.appendChild(charBody);
+    container.appendChild(charHead);
+    container.appendChild(charMouth);
+    container.appendChild(charEyeBalls);
+    container.appendChild(charEyes);
+    container.appendChild(charBrows);
 
-    charImg.classList.add('character-img');
-    charImg.setAttribute('src', 'img/char.gif');
+    charBody.classList.add('character-img', 'charcter-body');
     charImg.addEventListener( 'click', () => Actions.showStats());
   })();
 

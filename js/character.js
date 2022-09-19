@@ -163,5 +163,7 @@ let Character = {
       Character.changeStat(statNameArray[i], 0);
     }
     Character.checkup();
+
+    
   }
 };
