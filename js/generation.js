@@ -233,19 +233,25 @@ let genGame = (function genGame() {
     let charBody = document.createElement('img');
     let charHead = document.createElement('img');
     let charMouth = document.createElement('img');
-    let charEyeBalls = document.createElement('img');
+    let charEyeballs = document.createElement('img');
     let charEyes = document.createElement('img');
     let charBrows = document.createElement('img');
     
     container.appendChild(charBody);
     container.appendChild(charHead);
     container.appendChild(charMouth);
-    container.appendChild(charEyeBalls);
+    container.appendChild(charEyeballs);
     container.appendChild(charEyes);
     container.appendChild(charBrows);
 
-    charBody.classList.add('character-img', 'charcter-body');
-    charImg.addEventListener( 'click', () => Actions.showStats());
+    charBody.classList.add('character-img', 'character-body');
+    charHead.classList.add('character-img', 'character-head');
+    charMouth.classList.add('character-img', 'character-mouth');
+    charEyeballs.classList.add('character-img', 'character-eyeballs');
+    charEyes.classList.add('character-img', 'character-eyes');
+    charBrows.classList.add('character-img', 'character-brows');
+
+    charBrows.addEventListener( 'click', () => Actions.showStats());
   })();
 
   // also displays interactive feedback 

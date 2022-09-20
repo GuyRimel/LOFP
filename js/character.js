@@ -109,27 +109,59 @@ let Character = {
     Character.checkup();
   },
 
-  say: function say(text, rate) {
+  say: function say(text, rate, emotion) {
     let
       dialogElement = document.querySelector('.dialog'),
-      charImg = document.querySelector('.character-img'),
+      mouth = document.querySelector('.character-mouth'),
+      eyeballs = document.querySelector('.character-eyeballs'),
+      eyes = document.querySelector('.character-eyes'),
+      brows = document.querySelector('.character-brows'),
       iterate = setInterval(sayChar, rate),
       i = 0,
+      ii = 0,
       spaceChar = "\xa0";
 
-      Game.shush('.dialog');
-      charImg.setAttribute('src', 'img/char.talking.gif');
+    function excited() {
+      mouth.setAttribute('src', 'img/character/mouth7.png');
+      eyes.setAttribute('src', 'img/character/eyes3.png');
+    }
+
+    function exhausted() {
+      mouth.setAttribute('src', 'img/character/mouth5.png');
+      eyeballs.setAttribute('src', 'img/character/eyeballs1.png');
+      eyes.setAttribute('src', 'img/character/eyes1.png');
+    }
+
+    function emote() {
+      switch(emotion) {
+        case "excited":
+          excited();
+          break;
+        case 'exhausted':
+          exhausted();
+          break;
+      }
+    }
+
+    Game.shush('.dialog');
+    emote();
     
     function sayChar() {
       Character.isBusy = true;
       let char = (text.charAt(i) === " ") ? spaceChar : text.charAt(i);
       dialogElement.innerText += char;
+      if(i%2 == 0) {
+        mouth.setAttribute('src', `img/character/mouth${ii%4}.png`);
+        if(ii%4 === 0) emote();
+        ii++
+      }
       i++;
       
       if (i >= text.length) {
         clearInterval(iterate);
         Character.isBusy = false;
-        charImg.setAttribute('src', 'img/char.gif');
+        if(emotion) emote();
+        else { setTimeout(Character.face.reset, 300); }
       }
     }
   },
@@ -146,7 +178,8 @@ let Character = {
     Game.converse(
       '*huff *huff... UUUGHH...',
       'You are exhausted! Eat or drink!',
-      2000
+      2000,
+      'exhausted'
     )
   },
   
@@ -164,6 +197,24 @@ let Character = {
     }
     Character.checkup();
 
-    
+    Character.face.reset();
+
+
+
+  },
+
+  face: {
+    reset: () => {
+    document.querySelector('.character-body').setAttribute('src', 'img/character/body0.png');
+    document.querySelector('.character-head').setAttribute('src', 'img/character/head1.png');
+    document.querySelector('.character-mouth').setAttribute('src', 'img/character/mouth0.png');
+    document.querySelector('.character-eyeballs').setAttribute('src', 'img/character/blank.png');
+    document.querySelector('.character-eyes').setAttribute('src', 'img/character/eyes0.png');
+    document.querySelector('.character-brows').setAttribute('src', 'img/character/blank.png');
+    },
+
+    strain: () => {
+      
+    }
   }
 };

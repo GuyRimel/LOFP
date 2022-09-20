@@ -242,7 +242,7 @@
 }
 
 .character-img {
-    width: 120px;
+    position: absolute;
     border: 1px inset #ddd;
     border-top-right-radius: 21px;
 }

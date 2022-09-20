@@ -170,7 +170,7 @@ let Game = {
   },
   
   // predefined conversational timing between the game and character
-  converse: function converse(charSays, gameSays, delay) {
+  converse: function converse(charSays, gameSays, delay, emotion) {
     if(!Character.isBusy && !Game.isConversing){
       Game.isConversing = true;
       // order of events: shush both > charSays > gameSays
@@ -178,7 +178,7 @@ let Game = {
       let charSpeakingRate = Math.floor(delay / charSays.length);
       if( charSpeakingRate < 10 ) { charSpeakingRate = 10; }
       Game.shush();
-      Character.say(charSays, charSpeakingRate);
+      Character.say(charSays, charSpeakingRate, emotion);
       setTimeout(() => Game.say(gameSays), delay + 400);
       Game.isConversing = false;
     }
@@ -368,6 +368,8 @@ let Game = {
     Game.update();
 
     let loadedData = localStorage.getItem('LOFPData');
+    if(loadedData === null) return;
+
     loadedData = JSON.parse(loadedData);
 
     Game.currentIslandName= loadedData[0];

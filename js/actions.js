@@ -62,7 +62,8 @@ let Actions = (function() {
       Game.converse(
         'let\'s GOOO!!!',
         'off you go exploring...',
-        300
+        300,
+        'excited'
       )
       Game.generateExplorationArea();
     }
