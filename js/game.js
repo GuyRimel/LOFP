@@ -12,7 +12,7 @@ let Game = {
   time: {
     seasonsList: [ "Spring", "Summer", "Fall", "Winter" ],
     season: 0,
-    day: 0,
+    day: 1,
     daysPerSeason: 10,
     year: 1660,
     minute: 480,
@@ -63,6 +63,8 @@ let Game = {
     },
     
     setDate: function setDate() {
+      let weather = document.querySelector(".weather");
+      weather.innerText = Game.weather;
       let date = document.querySelector(".date");
       let season = Game.time.season;
       season = Game.time.seasonsList[season];
@@ -108,7 +110,7 @@ let Game = {
       if(midAlpha > 1) midAlpha = 1;
       // color of "morning sunlight"
       skyMid.style.backgroundImage =
-        `radial-gradient(hsla(45, 100%, 50%, ${midAlpha}), #0000)`;
+        `radial-gradient(circle at top 35%, hsla(45, 100%, 50%, ${midAlpha}), #0000)`;
     } else if(minute > 660){
       frontAlpha = 1 - (minute % 660 / 300);
       if(frontAlpha < 0) frontAlpha = 0;
@@ -289,6 +291,7 @@ let Game = {
           if(treeLeftNumber < 5 ) { treeLeftNumber = 5; }
           
           viewContainer.appendChild(tree);
+          tree.setAttribute('data-chops', 0);
           tree.classList.add('tree');
           tree.src = 'img/tree01.gif';
           tree.style.bottom = treeBottomNumber + '%';
@@ -302,8 +305,13 @@ let Game = {
     let gameScreen = document.querySelector('.game-screen');
     let container = document.querySelector('.view-container');
     let tree = e.target;
+    let chops = parseInt(tree.dataset.chops) + 1;
 
     Game.pow(e);
+    tree.dataset.chops = chops;
+    console.log(chops);
+    
+
   },
 
   pow: (e) => {
@@ -360,6 +368,7 @@ let Game = {
 
   update: () => {
     Game.time.changeTime(0);
+    Game.time.setDate();
   },
 
   load: () => {

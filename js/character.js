@@ -121,6 +121,10 @@ let Character = {
       ii = 0,
       spaceChar = "\xa0";
 
+    function normalEyes() {
+      eyes.setAttribute('src', 'img/character/eyes0.png');
+    }
+
     function excited() {
       mouth.setAttribute('src', 'img/character/mouth7.png');
       eyes.setAttribute('src', 'img/character/eyes3.png');
@@ -136,6 +140,7 @@ let Character = {
       switch(emotion) {
         case "excited":
           excited();
+          setTimeout(normalEyes, 600);
           break;
         case 'exhausted':
           exhausted();
@@ -160,8 +165,11 @@ let Character = {
       if (i >= text.length) {
         clearInterval(iterate);
         Character.isBusy = false;
-        if(emotion) emote();
-        else { setTimeout(Character.face.reset, 300); }
+        if(emotion) {
+          emote();
+        } else {
+          setTimeout(Character.face.reset, 300);
+        }
       }
     }
   },
