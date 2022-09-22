@@ -8,6 +8,7 @@ let Game = {
   chanceOfWater: .50,
   maxWaterWidth: 40,
   maxTrees: 6,
+  treeHardness: 4,
   
   time: {
     seasonsList: [ "Spring", "Summer", "Fall", "Winter" ],
@@ -107,29 +108,29 @@ let Game = {
     if(minute < 240) {
       frontAlpha = minute / 240;
       midAlpha = frontAlpha * 3;
-      if(midAlpha > 1) midAlpha = 1;
+      if(midAlpha > 0.5) midAlpha = 0.5;
       // color of "morning sunlight"
       skyMid.style.backgroundImage =
-        `radial-gradient(circle at top 35%, hsla(45, 100%, 50%, ${midAlpha}), #0000)`;
+        `linear-gradient(#0000 15%, hsla(45, 100%, 50%, ${midAlpha}))`;
     } else if(minute > 660){
       frontAlpha = 1 - (minute % 660 / 300);
       if(frontAlpha < 0) frontAlpha = 0;
       midAlpha = frontAlpha * 3;
       //color of "evening sunlight"
       skyMid.style.backgroundImage =
-        `radial-gradient(hsla(15, 100%, 50%, ${midAlpha}), #0000)`;
+        `linear-gradient(#0000 %15, hsla(15, 100%, 50%, ${midAlpha}))`;
     } else {
       midAlpha = 0;
       frontAlpha = 1;
     }
 
-    skyBack.style.backgroundColor =
+    skyBack.style.backgroundImage =
       // full night blue: 'hsla(247, 76%, 27%, 1)';
-      'hsla(247, 76%, 27%, 1)';
+      'linear-gradient(hsla(247, 76%, 27%, 1), hsla(247, 76%, 50%, 1))';
 
-    skyFront.style.backgroundColor =
+    skyFront.style.backgroundImage =
       // full noon blue: 'hsla(197, 71%, 73%, 1)';
-      `hsla(197, 71%, 73%, ${frontAlpha})`;
+      `linear-gradient(hsla(197, 71%, 73%, ${frontAlpha}), #EFEFFFCC)`;
   },
     
   say: function say(text) {
@@ -303,14 +304,37 @@ let Game = {
 
   chop: (e) => {
     let gameScreen = document.querySelector('.game-screen');
-    let container = document.querySelector('.view-container');
     let tree = e.target;
     let chops = parseInt(tree.dataset.chops) + 1;
 
     Game.pow(e);
     tree.dataset.chops = chops;
-    console.log(chops);
-    
+    console.log(e)
+
+    function fellTree() {
+      let log = document.createElement('img');
+      let woodHudRect = document.querySelector('.wood-hud-pic').getBoundingClientRect();
+      console.log(woodHudRect);
+      log.src = 'img/wood.gif';
+      log.style.left = e.x - (log.offsetHeight / 2) + 'px';
+      log.style.top = e.y - (log.offsetWidth / 2) + 'px';
+      log.classList.add('drop');
+      log.addEventListener('click', () => {
+        log.style.left = woodHudRect.left + 'px';
+        log.style.top = woodHudRect.top + 'px';
+        log.style.width = "1em";
+        setTimeout(()=>log.remove(), 500);
+      });
+      gameScreen.appendChild(log);
+
+
+      for(i = 0; i < 5; i++) {
+
+      }
+      tree.remove();
+    }
+
+    if(tree.dataset.chops == Game.treeHardness) fellTree();
 
   },
 

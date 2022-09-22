@@ -243,8 +243,14 @@
 
 .character-img {
     position: absolute;
+    width: inherit;
+    height: 120px;
     border: 1px inset #ddd;
     border-top-right-radius: 21px;
+}
+
+.character-bg {
+    background-color: #8ac;
 }
 
 .feedback, .dialog {
@@ -276,6 +282,7 @@
 .skill-bar { background-color: orange; }
 .power-bar { background-color: purple; }
 .agility-bar { background-color: cornflowerblue; }
+.excited { background-image: radial-gradient(goldenrod, orange) }
 
 .weather-time-date {
     width: 100%;
@@ -498,8 +505,13 @@
     position: absolute;
     width: 50px;
     height: auto;
-    transition: width 2s linear;
     z-index: 101;
+}
+
+.drop {
+    position: absolute;
+    width: 3em;
+    transition: all 0.2s linear;
 }
 
 .view-container svg.water:active {

@@ -186,8 +186,8 @@ let genGame = (function genGame() {
         resourceContainer.appendChild(resourceAmtElement);
         
         resourceImgElement.src = `img/${resourceName}.gif`;
-        // resourceImgElement.style.height = '45px';
-        resourceAmtElement.classList.add(`${resourceName}-hud`);
+        resourceImgElement.classList.add(`${resourceName}-hud-pic`);
+        resourceAmtElement.classList.add(`${resourceName}-hud-amt`);
 
         resourceNameElement.innerText = resourceName + '\xa0';
         resourceAmtElement.innerText = Character.resources[resourceName];
@@ -230,6 +230,7 @@ let genGame = (function genGame() {
   // also displays interactive feedback 
   (function genCharacterContainer() {
     let container = document.querySelector('.character-container')
+    let charBG = document.createElement('img');
     let charBody = document.createElement('img');
     let charHead = document.createElement('img');
     let charMouth = document.createElement('img');
@@ -237,6 +238,7 @@ let genGame = (function genGame() {
     let charEyes = document.createElement('img');
     let charBrows = document.createElement('img');
     
+    container.appendChild(charBG);
     container.appendChild(charBody);
     container.appendChild(charHead);
     container.appendChild(charMouth);
@@ -244,6 +246,7 @@ let genGame = (function genGame() {
     container.appendChild(charEyes);
     container.appendChild(charBrows);
 
+    charBG.classList.add('character-img', 'character-bg');
     charBody.classList.add('character-img', 'character-body');
     charHead.classList.add('character-img', 'character-head');
     charMouth.classList.add('character-img', 'character-mouth');

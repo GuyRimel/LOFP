@@ -112,6 +112,7 @@ let Character = {
   say: function say(text, rate, emotion) {
     let
       dialogElement = document.querySelector('.dialog'),
+      bg = document.querySelector('.character-bg'),
       mouth = document.querySelector('.character-mouth'),
       eyeballs = document.querySelector('.character-eyeballs'),
       eyes = document.querySelector('.character-eyes'),
@@ -121,11 +122,13 @@ let Character = {
       ii = 0,
       spaceChar = "\xa0";
 
-    function normalEyes() {
+    function normalEyesAndBG() {
+      bg.classList.remove('excited');
       eyes.setAttribute('src', 'img/character/eyes0.png');
     }
-
+    
     function excited() {
+      bg.classList.add('excited');
       mouth.setAttribute('src', 'img/character/mouth7.png');
       eyes.setAttribute('src', 'img/character/eyes3.png');
     }
@@ -140,7 +143,7 @@ let Character = {
       switch(emotion) {
         case "excited":
           excited();
-          setTimeout(normalEyes, 600);
+          setTimeout(normalEyesAndBG, 600);
           break;
         case 'exhausted':
           exhausted();
