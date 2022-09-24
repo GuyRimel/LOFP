@@ -186,7 +186,7 @@ let genGame = (function genGame() {
         resourceContainer.appendChild(resourceAmtElement);
         
         resourceImgElement.src = `img/${resourceName}.gif`;
-        resourceImgElement.classList.add(`${resourceName}-hud-pic`);
+        resourceImgElement.classList.add(`${resourceName}-hud-img`);
         resourceAmtElement.classList.add(`${resourceName}-hud-amt`);
 
         resourceNameElement.innerText = resourceName + '\xa0';

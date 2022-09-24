@@ -37,6 +37,15 @@ let Character = {
     gold: 0
   },
 
+  resourceMaximums: {
+    foodMax: 50,
+    waterMax: 50,
+    fiberMax: 50,
+    woodMax: 50,
+    stoneMax: 50,
+    goldMax: 50
+  },
+
   inventory: [
     { apples: 3 },
     { oranges: 5 }
@@ -91,11 +100,11 @@ let Character = {
     }
         
     let
-    percentFull = statValue / statMax * 100,
-    statBar = document.querySelector(`.${stat}-bar`),
-    statSpan = statBar.previousElementSibling,
-    statSpreadList = [ 'health', 'stamina', 'xp'],
-    statSpread;
+      percentFull = statValue / statMax * 100,
+      statBar = document.querySelector(`.${stat}-bar`),
+      statSpan = statBar.previousElementSibling,
+      statSpreadList = [ 'health', 'stamina', 'xp'],
+      statSpread;
 
     statSpan.innerText = statValue;
     statBar.style.width = `${percentFull}%`;
@@ -112,6 +121,8 @@ let Character = {
   changeResource: (resource, amt) => {
     let hudAmt = document.querySelector(`.${resource}-hud-amt`);
     let resourcesSpread = document.querySelector('.resources-spread');
+    let newAmt = Character.resources[resource] + amt;
+    if(newAmt > Character.resourceMaximums[`${resource}Max`] || newAmt < 0) amt = 0;
 
     resourcesSpread.classList.add(`resource-flash`);
     setTimeout(()=> {

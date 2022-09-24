@@ -277,7 +277,7 @@ let Game = {
       water.classList.add('water');
       water.style.width = waterWidth + '%';
       water.style.height = groundHeight + '%';
-      water.addEventListener ('click', (e) => console.log(e.target));
+      water.addEventListener ('click', (e) => Game.splash(e));
     })();
 
     (function genTrees() {
@@ -313,7 +313,7 @@ let Game = {
 
     function fellTree() {
       let log = document.createElement('img');
-      let woodHudRect = document.querySelector('.wood-hud-pic').getBoundingClientRect();
+      let woodHudRect = document.querySelector('.wood-hud-img').getBoundingClientRect();
       let i = 0;
       let interval = setInterval(falling, 30);
       function falling() {
@@ -339,15 +339,16 @@ let Game = {
         if(logTop > woodHudRect.top - 70) {
           logTop = woodHudRect.top - 70;
         }
-        console.log(log.offsetWidth);
-        log.style.left = logLeft + 'px';
-        log.style.top = logTop + 'px';
+        
+        log.style.left = (logLeft / screen.width * 100) + '%';
+        log.style.top = (logTop / screen.height * 100) + '%';
         log.src = 'img/wood.gif';
         log.classList.add('drop');
         log.addEventListener('click', () => {
           log.style.left = woodHudRect.left + 'px';
           log.style.top = woodHudRect.top + 'px';
           log.style.width = "1em";
+          navigator.vibrate(30);
           setTimeout(()=> {
             log.remove();
             Character.changeResource('wood', 1);
@@ -382,6 +383,33 @@ let Game = {
     setTimeout(removePowImg, 150);
   },
 
+  splash: (e) => {
+    let gameScreen = document.querySelector('.game-screen');
+    let waterHudRect = document.querySelector('.water-hud-img').getBoundingClientRect();
+    let droplet = document.createElement('img');
+    let amt;
+
+    Game.pow(e, "splash");
+    droplet.style.left = (e.x / screen.width * 100) + '%';
+    droplet.style.top = (e.y / screen.height * 100) + '%';
+    droplet.src = 'img/water.gif';
+    droplet.classList.add('drop');
+    gameScreen.appendChild(droplet);
+    setTimeout(() => {
+      droplet.style.left = waterHudRect.left + 'px';
+      droplet.style.top = waterHudRect.top + 'px';
+      droplet.style.width = "1em";
+      navigator.vibrate(30);
+      setTimeout(()=> {
+        droplet.remove();
+        (Character.resources.water == Character.resourceMaximums.waterMax) ? amt = 0 : amt = 1;
+        Character.changeStat('xp', amt);
+        Character.changeResource('water', amt);
+        Game.time.changeTime(4);
+      }, 300)
+    });
+  },
+
   goHome: (isLoaded) => {
     let container = document.querySelector('.view-container');
     let ground = document.createElement('svg');
@@ -405,8 +433,8 @@ let Game = {
   },
 
   removeOldGens: () => {
-    let oldGens = document.querySelectorAll('.view-container svg, .view-container img');
-    oldGens.forEach( (el) => el.remove() );
+    let oldGens = document.querySelectorAll('.view-container svg, .view-container img, .drop');
+    oldGens.forEach((el) => el.remove() );
   },
 
   // takes a decimal from 0 to 1 probability of true. returns boolean
