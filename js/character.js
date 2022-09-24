@@ -109,6 +109,18 @@ let Character = {
     Character.checkup();
   },
 
+  changeResource: (resource, amt) => {
+    let hudAmt = document.querySelector(`.${resource}-hud-amt`);
+    let resourcesSpread = document.querySelector('.resources-spread');
+
+    resourcesSpread.classList.add(`resource-flash`);
+    setTimeout(()=> {
+      Character.resources[resource] += amt;
+      hudAmt.innerText = Character.resources[resource];
+      resourcesSpread.classList.remove(`resource-flash`);
+    }, 100);
+  },
+
   say: function say(text, rate, emotion) {
     let
       dialogElement = document.querySelector('.dialog'),

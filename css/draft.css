@@ -112,7 +112,11 @@
     color: white;
     background-color: #000;
     border-bottom: 1px inset #ddd;
+    transition: all 0.1s;
+    border: 1px solid #000;
 }
+
+.resource-flash { border: 1px solid #fff; }
 
 .resources-spread strong {
     color: gray;
@@ -498,7 +502,7 @@
 }
 
 .view-container img:active {
-    transform: rotate(10deg);
+    transform: scale(1.05);
 }
 
 .pow {

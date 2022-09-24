@@ -8,12 +8,12 @@ let Game = {
   chanceOfWater: .50,
   maxWaterWidth: 40,
   maxTrees: 6,
-  treeHardness: 4,
+  treeHardness: 3,
   
   time: {
     seasonsList: [ "Spring", "Summer", "Fall", "Winter" ],
     season: 0,
-    day: 1,
+    day: 9,
     daysPerSeason: 10,
     year: 1660,
     minute: 480,
@@ -21,7 +21,7 @@ let Game = {
     wakeHour: 6,
     sleepHour: 22,
     
-    dayStart: function dayStart() {
+    dayStart: () => {
       let weather = document.querySelector(".weather");
       Game.weather = Game.weatherList[Game.getRandomInt(5)];
       weather.innerText = Game.weather;
@@ -40,7 +40,7 @@ let Game = {
       Game.time.changeTime(0);
     },
     
-    dayEnd: function dayEnd() {
+    dayEnd: () => {
       Character.isAsleep = true;
       Game.converse(
         '*yyyyaaaawwn...',
@@ -50,7 +50,7 @@ let Game = {
       setTimeout( () => Game.ask(1), 4000);
     },
     
-    convertTime: function convertTime(time) {
+    convertTime: (time) => {
       let hour = Game.time.wakeHour + Math.floor(time / 60);
       let minute = time % 60;
       let suffix;
@@ -63,7 +63,7 @@ let Game = {
       return timeString;
     },
     
-    setDate: function setDate() {
+    setDate: () => {
       let weather = document.querySelector(".weather");
       weather.innerText = Game.weather;
       let date = document.querySelector(".date");
@@ -74,7 +74,7 @@ let Game = {
       date.innerText = `${season} ${day}, ${year}`;
     },
     
-    changeTime: function changeTime(amount) {
+    changeTime: (amount) => {
       Game.time.minute += amount;
       let currentMinute = Game.time.minute;
       let minutesPerDay = Game.time.minutesPerDay;
@@ -133,14 +133,14 @@ let Game = {
       `linear-gradient(hsla(197, 71%, 73%, ${frontAlpha}), #EFEFFFCC)`;
   },
     
-  say: function say(text) {
+  say: (text) => {
     let feedbackElement = document.querySelector('.feedback');
     Game.shush('.feedback');
     feedbackElement.innerText = text;
   },
 
   // here is where the Game.currentQuestion is set
-  ask: function ask(questionNumber) {
+  ask: (questionNumber) => {
     if (!Number.isInteger(questionNumber)) { return }
     Game.currentQuestion = questionNumber;
 
@@ -173,7 +173,7 @@ let Game = {
   },
   
   // predefined conversational timing between the game and character
-  converse: function converse(charSays, gameSays, delay, emotion) {
+  converse: (charSays, gameSays, delay, emotion) => {
     if(!Character.isBusy && !Game.isConversing){
       Game.isConversing = true;
       // order of events: shush both > charSays > gameSays
@@ -246,7 +246,7 @@ let Game = {
     }
   ],
   
-  generateExplorationArea() {
+  generateExplorationArea: () => {
     let
     viewContainer = document.querySelector('.view-container'),
     groundHeight = 0,
@@ -303,53 +303,65 @@ let Game = {
   },
 
   chop: (e) => {
+    console.log(!Character.isAble())
+    if(!Character.isAble()) return;
     let gameScreen = document.querySelector('.game-screen');
     let tree = e.target;
     let chops = parseInt(tree.dataset.chops) + 1;
-
-    Game.pow(e);
-    tree.dataset.chops = chops;
-    console.log(e)
+    let treeAngle = chops * 7;
 
     function fellTree() {
       let log = document.createElement('img');
       let woodHudRect = document.querySelector('.wood-hud-pic').getBoundingClientRect();
-      console.log(woodHudRect);
+      let i = 0;
+      let interval = setInterval(falling, 20);
+      function falling() {
+        console.log(treeAngle);
+        if(i > 90 - treeAngle) {
+          tree.remove();
+          clearInterval(interval);
+        } else {
+          tree.style.transform = `rotate(-${treeAngle + i}deg)`;
+          i+=5;
+        }
+      };
+
       log.src = 'img/wood.gif';
-      log.style.left = e.x - (log.offsetHeight / 2) + 'px';
-      log.style.top = e.y - (log.offsetWidth / 2) + 'px';
+      log.style.left = e.x + 'px';
+      log.style.top = e.y + 'px';
       log.classList.add('drop');
       log.addEventListener('click', () => {
         log.style.left = woodHudRect.left + 'px';
         log.style.top = woodHudRect.top + 'px';
         log.style.width = "1em";
-        setTimeout(()=>log.remove(), 500);
+        setTimeout(()=> {
+          log.remove();
+          Character.changeResource('wood', 1);
+          Character.changeStat('xp', 1)
+        }, 300)
       });
       gameScreen.appendChild(log);
 
-
-      for(i = 0; i < 5; i++) {
-
-      }
-      tree.remove();
     }
 
-    if(tree.dataset.chops == Game.treeHardness) fellTree();
-
+    Game.pow(e);
+    tree.style.transform = `rotate(${-treeAngle}deg)`;
+    tree.dataset.chops = chops;
+    if(chops == Game.treeHardness) fellTree();
+    Game.time.changeTime(5);
+    Character.changeStat('stamina', -1)
   },
-
+  
   pow: (e) => {
     let gameScreen = document.querySelector('.game-screen');
     let powImg = document.createElement('img');
+    function removePowImg() { powImg.remove() }
 
     gameScreen.appendChild(powImg);
     powImg.src = 'img/impact.svg';
     powImg.classList.add('pow');
-    powImg.style.left = e.x - (powImg.offsetHeight / 2) + 'px';
-    powImg.style.top = e.y - (powImg.offsetWidth / 2) + 'px';
-
-    function removePowImg() { powImg.remove() }
-
+    powImg.style.left = e.x - (powImg.offsetWidth / 2) + 'px';
+    powImg.style.top = e.y - (powImg.offsetHeight / 2) + 'px';
     setTimeout(removePowImg, 150);
   },
 
