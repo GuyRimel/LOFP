@@ -275,8 +275,7 @@
     height: 7px;
     border-bottom: 2px solid #444;
     border-right: 1px solid black;
-    transition-timing-function: ease-out;
-    transition: width 0.3s;
+    transition: width 0.3s ease-out;
 }
 
 .level-bar { background-color: darkcyan; }

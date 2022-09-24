@@ -303,10 +303,11 @@ let Game = {
   },
 
   chop: (e) => {
-    console.log(!Character.isAble())
     if(!Character.isAble()) return;
     let gameScreen = document.querySelector('.game-screen');
+    let groundRect = document.querySelector('.ground').getBoundingClientRect();
     let tree = e.target;
+    let treeRect = tree.getBoundingClientRect();
     let chops = parseInt(tree.dataset.chops) + 1;
     let treeAngle = chops * 7;
 
@@ -314,11 +315,11 @@ let Game = {
       let log = document.createElement('img');
       let woodHudRect = document.querySelector('.wood-hud-pic').getBoundingClientRect();
       let i = 0;
-      let interval = setInterval(falling, 20);
+      let interval = setInterval(falling, 30);
       function falling() {
-        console.log(treeAngle);
         if(i > 90 - treeAngle) {
           tree.remove();
+          setTimeout(makeLog, 150);
           clearInterval(interval);
         } else {
           tree.style.transform = `rotate(-${treeAngle + i}deg)`;
@@ -326,21 +327,35 @@ let Game = {
         }
       };
 
-      log.src = 'img/wood.gif';
-      log.style.left = e.x + 'px';
-      log.style.top = e.y + 'px';
-      log.classList.add('drop');
-      log.addEventListener('click', () => {
-        log.style.left = woodHudRect.left + 'px';
-        log.style.top = woodHudRect.top + 'px';
-        log.style.width = "1em";
-        setTimeout(()=> {
-          log.remove();
-          Character.changeResource('wood', 1);
-          Character.changeStat('xp', 1)
-        }, 300)
-      });
-      gameScreen.appendChild(log);
+      function makeLog() {
+        let logLeft = treeRect.x + (treeRect.width / 2);
+        let logTop = treeRect.y + (treeRect.height / 2);
+        
+        if(logLeft < 0) logLeft = 0;
+        else if(logLeft > screen.width - 70) {
+          logLeft = screen.width - 70;
+        }
+        if(logTop < groundRect.top) logTop = groundRect.top;
+        if(logTop > woodHudRect.top - 70) {
+          logTop = woodHudRect.top - 70;
+        }
+        console.log(log.offsetWidth);
+        log.style.left = logLeft + 'px';
+        log.style.top = logTop + 'px';
+        log.src = 'img/wood.gif';
+        log.classList.add('drop');
+        log.addEventListener('click', () => {
+          log.style.left = woodHudRect.left + 'px';
+          log.style.top = woodHudRect.top + 'px';
+          log.style.width = "1em";
+          setTimeout(()=> {
+            log.remove();
+            Character.changeResource('wood', 1);
+            Character.changeStat('xp', 1)
+          }, 300)
+        });
+        gameScreen.appendChild(log);
+      }
 
     }
 
@@ -352,16 +367,18 @@ let Game = {
     Character.changeStat('stamina', -1)
   },
   
-  pow: (e) => {
+  pow: (e, splash) => {
     let gameScreen = document.querySelector('.game-screen');
     let powImg = document.createElement('img');
     function removePowImg() { powImg.remove() }
 
     gameScreen.appendChild(powImg);
     powImg.src = 'img/impact.svg';
+    if(splash) powImg.src = 'img/splash.png';
     powImg.classList.add('pow');
     powImg.style.left = e.x - (powImg.offsetWidth / 2) + 'px';
     powImg.style.top = e.y - (powImg.offsetHeight / 2) + 'px';
+    navigator.vibrate(30);
     setTimeout(removePowImg, 150);
   },
 
