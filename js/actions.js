@@ -3,9 +3,7 @@ let Actions = (function() {
   let btnArray = [
     // i 0, 1, 2, 3 are the left buttons
     { name: 'eat', perform: eat },
-    { name: 'whine', perform: whine },
     { name: 'drink', perform: drink },
-    { name: 'goof', perform: goof },
 
     // i 4, 5, 6, 7 are the right buttons
     { name: 'equip', perform: showEquip },

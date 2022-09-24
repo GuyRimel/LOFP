@@ -220,9 +220,9 @@ let genGame = (function genGame() {
       container.appendChild(button);
     }
 
-    for(i = 0; i < 10; i++) {
-      if(i > 3) { container = rightBtnContainer }
-      if(i > 7) { container = middleBtnContainer }
+    for(i = 0; i < 8; i++) {
+      if(i > 1) { container = rightBtnContainer }
+      if(i > 5) { container = middleBtnContainer }
       genBtns(container, i);
     }
   })();
