@@ -76,9 +76,14 @@
     overflow: hidden;
 }
 
-.view-container.home {
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: 10% repeat(4, 1fr);
+.view-container.home-view {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 10% repeat(5, 1fr);
+}
+
+.house {
+    grid-column-start: 2;
+    width: 1fr;
 }
 
 .sky-mid {
@@ -267,9 +272,9 @@
 .feedback { color: lightgray; font-family: Georgia, 'Times New Roman', Times, serif; }
 .dialog { color: cyan; }
 .gamepad-btn { border-radius: 5px; }
-#btn0 { background-color: rgb(255, 228, 78);}
-#btn1 { background-color: rgb(106, 255, 255);}
-#btn6 { background-color: lightsalmon;}
+#btn0 { background-color: rgb(255, 228, 78); }
+#btn1 { background-color: rgb(106, 255, 255); }
+#btn6 { background-color: lightsalmon; }
 #btn7 { background-color: tomato; }
 .bar-container { margin-bottom: 5px; }
 
@@ -407,8 +412,8 @@
     }
     
     .view-container.home {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: 10% repeat(8, 1fr);
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: 10% repeat(3, 1fr);
     }
 
     .view-container {

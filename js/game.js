@@ -413,10 +413,16 @@ let Game = {
   goHome: (isLoaded) => {
     let container = document.querySelector('.view-container');
     let ground = document.createElement('svg');
+    let house = document.createElement('img');
+    
     Game.removeOldGens();
-    container.classList.add('home');
-    container.appendChild(ground);
+    container.classList.add('home-view');
     ground.classList.add('ground');
+    container.appendChild(ground);
+    house.classList.add('house');
+    house.src = 'img/house0.png';
+    container.appendChild(house);
+
     if(isLoaded) {
       Game.converse(
         'weeeird ... it feels like the world has been... loaded, or something...',
