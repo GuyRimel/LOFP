@@ -403,7 +403,7 @@ let Game = {
       setTimeout(()=> {
         droplet.remove();
         (Character.resources.water == Character.resourceMaximums.waterMax) ? amt = 0 : amt = 1;
-        Character.changeStat('xp', amt);
+        Character.changeStat('stamina', amt);
         Character.changeResource('water', amt);
         Game.time.changeTime(4);
       }, 300)
