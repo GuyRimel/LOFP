@@ -348,7 +348,6 @@ let Game = {
           log.style.left = woodHudRect.left + 'px';
           log.style.top = woodHudRect.top + 'px';
           log.style.width = "1em";
-          navigator.vibrate(30);
           setTimeout(()=> {
             log.remove();
             Character.changeResource('wood', 1);
@@ -379,7 +378,6 @@ let Game = {
     powImg.classList.add('pow');
     powImg.style.left = e.x - (powImg.offsetWidth / 2) + 'px';
     powImg.style.top = e.y - (powImg.offsetHeight / 2) + 'px';
-    navigator.vibrate(30);
     setTimeout(removePowImg, 150);
   },
 
@@ -399,7 +397,6 @@ let Game = {
       droplet.style.left = waterHudRect.left + 'px';
       droplet.style.top = waterHudRect.top + 'px';
       droplet.style.width = "1em";
-      navigator.vibrate(30);
       setTimeout(()=> {
         droplet.remove();
         (Character.resources.water == Character.resourceMaximums.waterMax) ? amt = 0 : amt = 1;
